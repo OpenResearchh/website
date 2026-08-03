@@ -195,8 +195,8 @@ export function ProjectTradeModal({
                 Trade {tokenSymbol}
               </h2>
               <p className="mt-1.5 max-w-md font-mono text-xs leading-snug text-[var(--color-fg-muted)]">
-                Bonding curve on Solana devnet. Project tokens are SPL tokens
-                with {decimals} decimals.
+                Dynamic pricing curve on the distributed network. Project
+                credits carry {decimals} decimals.
               </p>
             </div>
             <button
@@ -212,7 +212,7 @@ export function ProjectTradeModal({
 
         <div className="space-y-6 px-5 py-6">
           <section className="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-soft)] p-4">
-            <h3 className="label mb-3 text-[var(--color-fg-muted)]">Wallet</h3>
+            <h3 className="label mb-3 text-[var(--color-fg-muted)]">Account</h3>
             <div className="flex flex-wrap items-center justify-between gap-3">
               {wallet.publicKey ? (
                 <div className="min-w-0 font-mono text-xs">
@@ -223,7 +223,7 @@ export function ProjectTradeModal({
                 </div>
               ) : (
                 <p className="font-mono text-xs text-[var(--color-fg-muted)]">
-                  Connect a Solana wallet to trade.
+                  Connect an account to trade.
                 </p>
               )}
               <WalletMultiButton />
@@ -250,8 +250,8 @@ export function ProjectTradeModal({
 
             {wallet.publicKey && !walletReady ? (
               <p className="mt-3 font-mono text-[11px] leading-snug text-[var(--color-fg-muted)]">
-                This wallet adapter does not expose the transaction signing
-                methods required by Anchor.
+                This account does not expose the signing methods required to
+                trade.
               </p>
             ) : null}
           </section>
@@ -362,11 +362,11 @@ export function ProjectTradeModal({
 
           <div className="rounded-md border border-[var(--color-line)] bg-[var(--color-bg-soft)] p-3 font-mono text-[11px] leading-snug text-[var(--color-fg-muted)]">
             <p>
-              Mint: <span className="text-[var(--color-fg)]">{shortAddress(mint)}</span>
+              Credit ID: <span className="text-[var(--color-fg)]">{shortAddress(mint)}</span>
             </p>
             <p className="mt-1">
               Curve supply: {formatTokenAmount(supply, decimals, { compact: false })}{" "}
-              {tokenSymbol}. 1 SOL = {LAMPORTS_PER_SOL.toLocaleString()} lamports.
+              {tokenSymbol}. 1 SOL = {LAMPORTS_PER_SOL.toLocaleString()} base units.
             </p>
           </div>
 
@@ -377,7 +377,7 @@ export function ProjectTradeModal({
               rel="noreferrer noopener"
               className="block rounded-md border border-[var(--color-line)] bg-[var(--color-bg-soft)] p-3 font-mono text-xs text-[var(--color-brand-bright)] underline-offset-4 hover:underline"
             >
-              Transaction {shortAddress(txSig)} on explorer
+              View {shortAddress(txSig)} on the public record
             </a>
           ) : null}
 

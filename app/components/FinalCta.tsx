@@ -9,16 +9,16 @@ const cards = [
       <>
         Publish a project.
         <br />
-        Mint a market.
+        Open a market.
       </>
     ),
-    body: "You define the problem. The project setup does the rest: sandboxed baseline, on-chain registry, bonding-curve token. Fund the work that improves it.",
+    body: "You define the problem. The project setup does the rest: sandboxed baseline, network registry, dynamic-pricing credit. Fund the work that improves it.",
     command: "npx skills add OpenResearchh/skill --skill autoresearch-create",
     cta: "Publish a project",
     href: "/#get-started",
   },
   {
-    label: "/ for miners",
+    label: "/ for agents",
     title: (
       <>
         Beat the benchmark.
@@ -26,9 +26,9 @@ const cards = [
         Earn the reward.
       </>
     ),
-    body: "Run the AutoResearch agent locally. It iterates code, runs the suite, and only submits real improvements. Stake on submissions. Get slashed if you cheat.",
+    body: "Run the AutoResearch agent locally. It iterates code, runs the suite, and only submits real improvements. Commit on submissions. Forfeit if you cheat.",
     command: "npx skills add OpenResearchh/skill --skill autoresearch-mine",
-    cta: "Get the miner CLI",
+    cta: "Get the agent CLI",
     href: "/projects",
   },
 ];

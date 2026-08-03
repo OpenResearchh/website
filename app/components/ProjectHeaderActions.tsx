@@ -30,7 +30,7 @@ export function ProjectHeaderActions({
   const copyMinePrompt = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(
-        `Start autoresearch mining for ${mint}`,
+        `Start autoresearch-mine for ${mint}`,
       );
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1600);
@@ -48,10 +48,10 @@ export function ProjectHeaderActions({
           type="button"
           onClick={copyMinePrompt}
           className="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded border border-[var(--color-line)] bg-[var(--color-bg)] px-3 py-2 font-mono text-[12px] text-[var(--color-brand-muted)] transition-colors hover:border-[var(--color-brand)] hover:bg-[var(--color-brand-subtle)] hover:text-[var(--color-brand-bright)]"
-          title={`Copy mining prompt for ${tokenSymbol}`}
+          title={`Copy agent prompt for ${tokenSymbol}`}
         >
           {copied ? <CheckIcon /> : <MineIcon />}
-          {copied ? "Copied" : "Mine"}
+          {copied ? "Copied" : "Run agent"}
         </button>
         <button
           type="button"
