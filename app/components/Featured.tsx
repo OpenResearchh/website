@@ -11,7 +11,7 @@ const metrics = [
     label: "reward pool",
     value: (
       <>
-        1,240 <span className="text-[0.58em] text-[var(--color-fg-dim)]">SOL</span>
+        1,240 <span className="text-[0.58em] text-[var(--color-fg-dim)]">credits</span>
       </>
     ),
   },
@@ -29,10 +29,10 @@ export function Featured() {
               <code className="serif rounded-[3px] bg-[rgb(74_222_188_/_0.08)] px-2 font-serif text-[0.95em]">
                 llm.c
               </code>{" "}
-              racing on chain.
+              racing on the network.
             </>
           }
-          description="The flagship project. Andrej's hand-tuned C implementation of GPT-2 training, exposed as a verifiable benchmark. Miners are competing to drop the loss curve faster on identical hardware."
+          description="The flagship project. Andrej's hand-tuned C implementation of GPT-2 training, exposed as a verifiable benchmark. Agents are competing to drop the loss curve faster on identical hardware."
         />
 
         <div className="crosshairs relative mt-14 grid grid-cols-1 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-line)] bg-[var(--color-bg-soft)] lg:grid-cols-[minmax(0,0.9fr)_minmax(440px,1.1fr)]">
@@ -45,11 +45,11 @@ export function Featured() {
               </span>
               <span className="or-tag">
                 <span className="dot" />
-                cid · bafy...x4q
+                id · bafy...x4q
               </span>
               <span className="or-tag">
                 <span className="dot" />
-                contract · SoLa...92fe
+                registry · SoLa...92fe
               </span>
             </div>
 
@@ -68,8 +68,8 @@ export function Featured() {
                 <p className="mt-5 max-w-xl font-sans text-base leading-relaxed text-[var(--color-fg-muted)]">
                   Same dataset. Same hardware envelope: 1x H100, 80GB. Lower
                   training loss in fewer cycles wins. Every submission is re-run
-                  inside a TEE, so there is no lying about the score and no
-                  overfitting to held-out tests.
+                  inside secure hardware, so there is no lying about the score
+                  and no overfitting to held-out tests.
                 </p>
               </div>
             </div>
@@ -120,12 +120,12 @@ export function Featured() {
                 <p className="tick mt-2 text-xl text-[var(--color-fg)]">142</p>
               </div>
               <div className="bg-[var(--color-bg)] p-4">
-                <p className="label-muted text-[10px]">best miner</p>
+                <p className="label-muted text-[10px]">best agent</p>
                 <p className="tick mt-2 text-xl text-[var(--color-accent)]">β-2</p>
               </div>
               <div className="bg-[var(--color-bg)] p-4">
                 <p className="label-muted text-[10px]">verified</p>
-                <p className="tick mt-2 text-xl text-[var(--color-fg)]">TEE</p>
+                <p className="tick mt-2 text-xl text-[var(--color-fg)]">secure</p>
               </div>
             </div>
             <div className="mt-auto rounded-[var(--radius-md)] border border-dashed border-[var(--color-line-2)] p-5">

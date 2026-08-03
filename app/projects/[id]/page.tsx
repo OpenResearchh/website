@@ -43,9 +43,9 @@ export const dynamic = "force-dynamic";
 export const revalidate = 30;
 
 /** Legacy header blurb when protocol.json has no `meta.purposeStatement` (older publishes). */
-const FALLBACK_PURPOSE_TITLE = "Immutable benchmark project on Solana devnet.";
+const FALLBACK_PURPOSE_TITLE = "Immutable benchmark project on the distributed network.";
 const FALLBACK_PURPOSE_BODY =
-  "Artifacts are fetched from Irys by their on-chain Irys IDs and pinned alongside SHA-256 hashes. Beat the network best to earn tokens from the miner pool.";
+  "Artifacts are fetched from permanent storage by their network storage IDs and pinned alongside content fingerprints. Beat the network best to earn credits from the contributor pool.";
 
 type RouteProps = { params: Promise<{ id: string }> };
 
@@ -61,7 +61,7 @@ export async function generateMetadata({
 
   return {
     title: `${project.tokenName} (${project.tokenSymbol}) · Project #${project.id}`,
-    description: `On-chain protocol, benchmark, and current best score for ${project.tokenName} on the OpenResearch Solana program.`,
+    description: `Network protocol, benchmark, and current best score for ${project.tokenName} on the OpenResearch registry.`,
   };
 }
 
@@ -77,7 +77,7 @@ export default async function ProjectViewerPage({ params }: RouteProps) {
     project = await fetchProject(null, projectId);
   } catch (e) {
     registryError =
-      e instanceof Error ? e.message : "Failed to read OpenResearch program";
+      e instanceof Error ? e.message : "Failed to read OpenResearch registry";
   }
 
   if (!project) {
@@ -95,7 +95,7 @@ export default async function ProjectViewerPage({ params }: RouteProps) {
     }).catch(
       (e): FetchedArtifact => ({
         kind: "error",
-        message: e instanceof Error ? e.message : "Irys gateway unreachable",
+        message: e instanceof Error ? e.message : "Storage gateway unreachable",
       }),
     ),
     listProposals(null)
@@ -254,9 +254,9 @@ function ProjectHeader({
             sub={`supply ${formatTokenAmount(totalSupply, decimals)} ${project.tokenSymbol}`}
           />
           <Stat
-            label="Miner pool"
+            label="Contributor pool"
             value={`${formatTokenAmount(project.minerPoolMinted, decimals)} / ${formatTokenAmount(project.minerPoolCap, decimals)}`}
-            sub={`minted / cap · ${project.tokenSymbol}`}
+            sub={`issued / cap · ${project.tokenSymbol}`}
           />
         </dl>
       </div>
@@ -347,7 +347,7 @@ function ProjectBody({
   );
 }
 
-/** `protocol.json` from Irys (artifact) — same shape as on-chain pinned protocol. */
+/** `protocol.json` from permanent storage (artifact) — same shape as the network-pinned protocol. */
 function metaPurposeStatementFromArtifact(artifact: FetchedArtifact): string | null {
   if (artifact.kind !== "json" || !artifact.data || typeof artifact.data !== "object") {
     return null;
@@ -385,7 +385,7 @@ function ProtocolPanel({
           </h2>
         </div>
         <p className="font-mono text-xs text-[var(--color-fg-dim)]">
-          Irys ·{" "}
+          Storage ·{" "}
           {!url && hash === ZERO_HASH_HEX ? (
             <span>not published</span>
           ) : url ? (
@@ -423,14 +423,14 @@ function ArtifactRender({
       return (
         <Notice
           title="No protocol artifact yet"
-          body="This project has no retrievable Irys artifact recorded on-chain yet."
+          body="This project has no retrievable stored artifact recorded on the network yet."
         />
       );
     case "error":
       return (
         <Notice
           tone="error"
-          title="Could not load from Irys"
+          title="Could not load from storage"
           body={artifact.message}
           footer={
             hash !== ZERO_HASH_HEX && "url" in artifact && artifact.url ? (
@@ -460,7 +460,7 @@ function ArtifactRender({
               rel="noreferrer noopener"
               className="font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline"
             >
-              Open in Irys gateway →
+              Open in storage gateway →
             </a>
           }
         />
@@ -565,7 +565,7 @@ function BenchmarkTrackRecord({
         <div>
           <p className="label">Benchmark track record</p>
           <h2 className="mt-1 font-mono text-2xl font-semibold text-[var(--color-fg)]">
-            Mining improvements
+            Agent improvements
           </h2>
         </div>
         <span className="or-tag">
@@ -705,7 +705,7 @@ function ContributionGrid({ proposals }: { proposals: ProposalView[] }) {
         ))}
       </div>
       <p className="mt-4 font-sans text-xs leading-relaxed text-[var(--color-fg-muted)]">
-        Last 35 days of proposal submissions from on-chain proposal accounts.
+        Last 35 days of proposal submissions from network proposal records.
       </p>
     </div>
   );
@@ -776,12 +776,12 @@ function OnChainCard({
       <PeopleList project={project} proposals={proposals} />
       <div className="border border-[var(--color-line)] bg-[var(--color-bg-soft)]">
         <div className="border-b border-[var(--color-line)] px-5 py-4">
-          <p className="label">On-chain</p>
+          <p className="label">Network</p>
           <p className="mt-1 font-mono text-base text-[var(--color-fg)]">
-            Solana devnet
+            Distributed network
           </p>
           <p className="mt-1 font-mono text-xs text-[var(--color-fg-dim)]">
-            program{" "}
+            registry{" "}
             <AddressLink
               address={OPEN_RESEARCH_PROGRAM_ID.toBase58()}
               className="text-[var(--color-fg-muted)]"
@@ -817,9 +817,9 @@ function OnChainCard({
           </CardRow>
         </CardSection>
 
-        <CardSection title="Token">
+        <CardSection title="Credit">
           <CardRow
-            label="Mint"
+            label="Credit ID"
             ddClassName="flex min-w-0 flex-wrap items-center justify-end gap-2 text-right font-mono text-xs text-[var(--color-fg-muted)]"
           >
             <span className="min-w-0 truncate">
@@ -827,7 +827,7 @@ function OnChainCard({
             </span>
             <CopyTextButton
               text={project.mint.toBase58()}
-              label="Copy project token mint"
+              label="Copy project credit ID"
             />
           </CardRow>
           <CardRow label="Name">
@@ -858,7 +858,7 @@ function OnChainCard({
               {formatSol(currentPrice)} SOL
             </span>
           </CardRow>
-          <CardRow label="Miner pool">
+          <CardRow label="Contributor pool">
             <span className="font-mono text-sm text-[var(--color-fg)]">
               {formatTokenAmount(project.minerPoolMinted, decimals)} /{" "}
               {formatTokenAmount(project.minerPoolCap, decimals)}
@@ -870,7 +870,7 @@ function OnChainCard({
           <CardRow label="Creator">
             <AddressLink address={project.creator.toBase58()} />
           </CardRow>
-          <CardRow label="Best miner">
+          <CardRow label="Best agent">
             {isBaseline ? (
               <span className="font-mono text-sm text-[var(--color-fg-dim)]">
                 - none yet
@@ -886,7 +886,7 @@ function OnChainCard({
           </CardRow>
         </CardSection>
 
-        <CardSection title="Irys artifacts">
+        <CardSection title="Stored artifacts">
           <HashRow
             label="Protocol"
             hash={project.protocolHash}
@@ -923,8 +923,8 @@ function OnChainCard({
       </div>
 
       <p className="mt-3 font-mono text-[11px] leading-relaxed text-[var(--color-fg-dim)]">
-        The program stores 32-byte Irys IDs for retrieval and 32-byte SHA-256
-        hashes for integrity checks.
+        The registry stores 32-byte storage IDs for retrieval and 32-byte
+        content fingerprints for integrity checks.
       </p>
     </aside>
   );
@@ -950,18 +950,18 @@ function PeopleList({
       <div className="border-b border-[var(--color-line)] px-5 py-4">
         <p className="label">People</p>
         <p className="mt-1 font-sans text-sm text-[var(--color-fg-muted)]">
-          Creator and miners seen in proposal accounts.
+          Creator and agents seen in proposal records.
         </p>
       </div>
       <div className="divide-y divide-[var(--color-line)]">
         <PersonRow label="Creator" address={project.creator.toBase58()} />
         {miners.length === 0 ? (
           <div className="px-5 py-4 font-sans text-sm text-[var(--color-fg-muted)]">
-            No miners have submitted proposals yet.
+            No agents have submitted proposals yet.
           </div>
         ) : (
           miners.map((miner, i) => (
-            <PersonRow key={miner} label={`Miner ${i + 1}`} address={miner} />
+            <PersonRow key={miner} label={`Agent ${i + 1}`} address={miner} />
           ))
         )}
       </div>
@@ -994,16 +994,16 @@ function MineQuickstart({
 }) {
   const install =
     "npx skills add OpenResearchh/skill --skill autoresearch-mine";
-  const run = `Start autoresearch mining for ${mint}`;
+  const run = `Start autoresearch-mine for ${mint}`;
 
   return (
     <details className="group mb-6 border border-[var(--color-line)] bg-[var(--color-bg-soft)]" open>
       <summary className="flex cursor-pointer list-none items-start justify-between gap-4 border-b border-[var(--color-line)] px-5 py-4 marker:content-none [&::-webkit-details-marker]:hidden">
         <div>
-          <p className="label">Mine in 60 seconds</p>
+          <p className="label">Run in 60 seconds</p>
         <p className="mt-1 font-sans text-sm leading-snug text-[var(--color-fg-muted)]">
-          Install the skill, then start mining for {tokenSymbol}. Submit only if
-          you beat the best.
+          Install the skill, then start the agent for {tokenSymbol}. Submit only
+          if you beat the best.
         </p>
         </div>
         <span className="mt-1 font-mono text-lg text-[var(--color-fg-dim)] transition-transform group-open:rotate-45">
@@ -1016,13 +1016,13 @@ function MineQuickstart({
           n="01"
           label="Install"
           command={install}
-          copyLabel="Copy mining skill install command"
+          copyLabel="Copy agent skill install command"
         />
         <CommandRow
           n="02"
           label="Run"
           command={run}
-          copyLabel={`Copy mining start prompt for ${tokenSymbol}`}
+          copyLabel={`Copy agent start prompt for ${tokenSymbol}`}
         />
       </div>
     </details>
@@ -1149,7 +1149,7 @@ function ErrorPage({
         <section>
           <div className="container-page py-24">
             <div className="border border-[var(--color-line)] bg-[var(--color-bg-soft)] px-8 py-12">
-              <p className="label">Program unavailable</p>
+              <p className="label">Registry unavailable</p>
               <p className="mt-3 font-sans text-base text-[var(--color-fg)]">
                 Could not read project #{projectId} from OpenResearch.
               </p>
@@ -1162,7 +1162,7 @@ function ErrorPage({
                 rel="noreferrer noopener"
                 className="mt-6 inline-block font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline"
               >
-                Open Solana Explorer →
+                Open public record →
               </a>
             </div>
           </div>

@@ -24,15 +24,15 @@ const layers = [
   },
   {
     n: "L4",
-    name: "Project Token",
+    name: "Project Credits",
     detail:
-      "Bonding-curve ProjectToken per project. Buyers signal demand, miners earn supply.",
+      "Dynamic-pricing credit per project. Buyers signal demand, agents earn supply.",
   },
   {
     n: "L5",
     name: "Protocol Registry",
     detail:
-      "Solana program accounts for projects, current best scores, Irys retrieval IDs, and artifact hashes.",
+      "Network records for projects, current best scores, storage retrieval IDs, and artifact fingerprints.",
   },
   {
     n: "L6",
@@ -44,13 +44,13 @@ const layers = [
     n: "L7",
     name: "Proposal Submission",
     detail:
-      "Stake + code hash + benchmark proof packaged into a single transaction.",
+      "Commitment + code fingerprint + benchmark proof packaged into a single submission.",
   },
   {
     n: "L8",
-    name: "TEE Validators",
+    name: "Verifier Nodes",
     detail:
-      "Allowlisted enclaves rerun benchmarks and sign attestations on-chain.",
+      "Allowlisted verifier nodes rerun benchmarks and sign verifications on the network.",
   },
 ];
 
@@ -85,16 +85,16 @@ export function Architecture() {
         </div>
 
         <div className="mt-14 grid grid-cols-1 border-t border-[var(--color-line)] sm:grid-cols-3">
-          <DeployRow label="Cluster" value="Solana devnet" />
+          <DeployRow label="Network" value="Distributed network" />
           <DeployRow
-            label="Program"
+            label="Registry ID"
             value={shortAddress(OPEN_RESEARCH_PROGRAM_ID.toBase58())}
             href={explorerAddressUrl(OPEN_RESEARCH_PROGRAM_ID)}
             title={OPEN_RESEARCH_PROGRAM_ID.toBase58()}
             mono
           />
           <DeployRow
-            label="Config PDA"
+            label="Config record"
             value={shortAddress(pdas.config().toBase58())}
             href={explorerAddressUrl(pdas.config())}
             title={pdas.config().toBase58()}
@@ -131,7 +131,7 @@ function DeployRow({
           href={href}
           target="_blank"
           rel="noreferrer noopener"
-          title={title ?? `View ${value} on Solana Explorer`}
+          title={title ?? `View ${value} on the public record`}
           className={`${valueClass} block underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline`}
         >
           {value}

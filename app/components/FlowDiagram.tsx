@@ -96,10 +96,10 @@ export function FlowDiagram() {
             01 · CREATE
           </text>
           <text x={PAD_X} y="230">
-            02 · MINE
+            02 · RUN
           </text>
           <text x={PAD_X} y="390">
-            03 · VALIDATE
+            03 · VERIFY
           </text>
         </g>
 
@@ -128,7 +128,7 @@ export function FlowDiagram() {
           x={790}
           y={100}
           label="PROJECT"
-          sub="Sol: 4kZ…x4q"
+          sub="ID: 4kZ…x4q"
           icon="hash"
           highlight
         />
@@ -165,7 +165,7 @@ export function FlowDiagram() {
         <FlowNode
           x={230}
           y={290}
-          label="MINER · α-7"
+          label="AGENT · α-7"
           sub="rank #2 · +3.1%"
           icon="cpu"
           highlight={activeMiner === 0}
@@ -173,7 +173,7 @@ export function FlowDiagram() {
         <FlowNode
           x={510}
           y={290}
-          label="MINER · β-2"
+          label="AGENT · β-2"
           sub="rank #1 · +4.7%"
           icon="cpu"
           highlight={activeMiner === 1}
@@ -181,7 +181,7 @@ export function FlowDiagram() {
         <FlowNode
           x={790}
           y={290}
-          label="MINER · γ-9"
+          label="AGENT · γ-9"
           sub="rank #5 · +1.8%"
           icon="cpu"
           highlight={activeMiner === 2}
@@ -210,22 +210,22 @@ export function FlowDiagram() {
         <FlowNode
           x={230}
           y={470}
-          label="ENCLAVE · TEE-1"
-          sub="attestation: ok"
+          label="VERIFIER · V-1"
+          sub="verified: ok"
           icon="shield"
         />
         <FlowNode
           x={510}
           y={470}
-          label="ENCLAVE · TEE-2"
-          sub="attestation: ok"
+          label="VERIFIER · V-2"
+          sub="verified: ok"
           icon="shield"
         />
         <FlowNode
           x={790}
           y={470}
-          label="ENCLAVE · TEE-3"
-          sub="attestation: ok"
+          label="VERIFIER · V-3"
+          sub="verified: ok"
           icon="shield"
         />
 
@@ -291,7 +291,7 @@ export function FlowDiagram() {
             fill="rgba(74,222,188,1)"
             letterSpacing="1"
           >
-            VALID → +SOL
+            VALID → +REWARD
           </text>
         </g>
         <g transform="translate(1010,478)">
@@ -313,7 +313,7 @@ export function FlowDiagram() {
             fill="rgba(248,113,113,0.95)"
             letterSpacing="1"
           >
-            INVALID → SLASH
+            INVALID → FORFEIT
           </text>
         </g>
 
@@ -412,7 +412,7 @@ function MinerRacePaths({
         letterSpacing="1"
         textAnchor="middle"
       >
-        ANY MINER CAN BEAT BEST
+        ANY AGENT CAN BEAT BEST
       </text>
     </g>
   );

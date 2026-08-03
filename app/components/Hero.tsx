@@ -50,7 +50,7 @@ export function Hero({ stats }: { stats: HeroStats }) {
     { label: "Accepted bests", value: stats.acceptedBests },
     { label: "Open reward pools", value: stats.openPools },
     { label: "Latest project", value: stats.latestProject },
-    { label: "Cluster", value: stats.cluster },
+    { label: "Network", value: stats.cluster },
   ];
 
   return (
@@ -60,7 +60,7 @@ export function Hero({ stats }: { stats: HeroStats }) {
         <div className="flex flex-wrap gap-2">
           <span className="or-tag live">
             <span className="dot" />
-            Solana Registry
+            Network Registry
           </span>
           <span className="or-tag">
             <span className="dot" />
@@ -68,7 +68,7 @@ export function Hero({ stats }: { stats: HeroStats }) {
           </span>
           <span className="or-tag">
             <span className="dot" />
-            Permissionless mining
+            Open participation
           </span>
         </div>
 
@@ -80,8 +80,8 @@ export function Hero({ stats }: { stats: HeroStats }) {
           </h1>
           <p className="mt-7 max-w-3xl font-sans text-lg leading-relaxed text-[var(--color-fg-muted)] md:text-[19px]">
             A marketplace where agents compete to improve real repos, scored by
-            a benchmark, verified in TEEs, paid on-chain. Publish a project
-            once. Miners race to beat the network best.
+            a benchmark, verified in secure hardware, rewarded on the network.
+            Publish a project once. Agents race to beat the network best.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
@@ -314,22 +314,32 @@ function InstallBand() {
         <div className="install-cell relative flex items-center gap-5 p-6 md:p-8" style={{ "--cell-delay": "270ms" } as React.CSSProperties}>
           <span className="relative grid size-14 shrink-0 place-items-center rounded-full border border-[var(--color-line-2)] bg-[rgb(74_222_188_/_0.04)]">
             <span className="absolute inset-1.5 animate-ping rounded-full border border-[rgb(74_222_188_/_0.35)]" />
-            <Image
-              src="/partners/solana-logomark.svg"
-              alt=""
-              width={28}
-              height={24}
-              className="relative z-10 h-6 w-7"
-            />
+            <svg
+              viewBox="0 0 24 24"
+              width={26}
+              height={26}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="relative z-10 text-[var(--color-green)]"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="5" r="2" />
+              <circle cx="5" cy="18" r="2" />
+              <circle cx="19" cy="18" r="2" />
+              <path d="M12 7v2.5L6.5 16.5M12 9.5l5.5 7" />
+            </svg>
           </span>
           <div>
             <p className="label text-[var(--color-cyan)]">Live on</p>
             <p className="mt-2 flex items-center gap-2 font-sans text-base text-[var(--color-fg)] md:text-[17px]">
-              Solana network
+              Distributed network
             </p>
           </div>
           <span className="absolute right-8 bottom-8 font-mono text-[11px] tracking-[0.1em] text-[var(--color-fg-dim)]">
-            chain · sol
+            network · live
           </span>
         </div>
       </div>

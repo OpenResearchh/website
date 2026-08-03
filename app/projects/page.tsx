@@ -34,7 +34,7 @@ export const revalidate = 30;
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "All OpenResearch projects published on the Solana devnet program, with current best scores, baselines, and project token prices.",
+    "All OpenResearch projects published on the distributed network registry, with current best scores, baselines, and project credit prices.",
 };
 
 export default async function ProjectsPage() {
@@ -57,7 +57,7 @@ export default async function ProjectsPage() {
     );
     events = buildRegistryEvents(rows, allProposals, metricsByProjectId);
   } catch (e) {
-    error = e instanceof Error ? e.message : "Failed to read OpenResearch program";
+    error = e instanceof Error ? e.message : "Failed to read OpenResearch registry";
   }
 
   return (
@@ -133,7 +133,7 @@ function buildRegistryEvents(
     let message: string;
     switch (proposal.status) {
       case "approved":
-        message = `Miner advanced ${tokenName} to ${scoreText}`;
+        message = `Agent advanced ${tokenName} to ${scoreText}`;
         break;
       case "rejected":
         message = `Proposal #${proposal.id} on ${tokenName} rejected`;
@@ -146,7 +146,7 @@ function buildRegistryEvents(
         break;
       case "pending":
       default:
-        message = `Miner submitted proposal #${proposal.id} on ${tokenName} at ${scoreText}`;
+        message = `Agent submitted proposal #${proposal.id} on ${tokenName} at ${scoreText}`;
         break;
     }
 
@@ -184,7 +184,7 @@ function NetworkSummary({
             <p className="label">/ network · live</p>
             <h2 className="mt-5 text-balance font-sans text-[40px] leading-[1] font-medium tracking-tight text-[var(--color-fg)] md:text-[56px]">
               Live projects,{" "}
-              <span className="serif">live miners.</span>
+              <span className="serif">live agents.</span>
             </h2>
             <p className="mt-5 max-w-2xl font-sans text-base leading-relaxed text-[var(--color-fg-muted)]">
               {error ? (
@@ -192,7 +192,7 @@ function NetworkSummary({
               ) : (
                 <>
                   Every active benchmark on the {SOLANA_CLUSTER} registry, with
-                  live score, token, and bonding-curve state. Program:{" "}
+                  live score, credit, and pricing-curve state. Registry:{" "}
                   <AddressLink address={OPEN_RESEARCH_PROGRAM_ID.toBase58()} />
                 </>
               )}
@@ -241,9 +241,9 @@ function NetStats({ projects }: { projects: ProjectListItem[] }) {
     { label: "Registry projects", value: projects.length.toLocaleString() },
     { label: "Accepted bests", value: acceptedBests.toLocaleString(), up: acceptedBests > 0 },
     { label: "Open reward pools", value: openPools.toLocaleString() },
-    { label: "Minted tokens", value: mintedProjects.toLocaleString() },
+    { label: "Issued credits", value: mintedProjects.toLocaleString() },
     { label: "Latest project", value: latest ? latest.tokenSymbol : "-" },
-    { label: "Cluster", value: SOLANA_CLUSTER },
+    { label: "Network", value: SOLANA_CLUSTER },
   ];
 
   return (
@@ -304,13 +304,13 @@ function ErrorState({ message }: { message: string }) {
         <div className="border border-[var(--color-line)] bg-[var(--color-bg-soft)] px-8 py-12">
           <p className="label">Registry unavailable</p>
           <p className="mt-3 font-sans text-base text-[var(--color-fg)]">
-            Could not read the OpenResearch Solana program just now.
+            Could not read the OpenResearch registry just now.
           </p>
           <p className="mt-2 font-mono text-xs text-[var(--color-fg-dim)]">
             {message}
           </p>
           <p className="mt-6 font-sans text-sm text-[var(--color-fg-muted)]">
-            Refresh in a moment, or try the explorer directly:
+            Refresh in a moment, or view the public record directly:
           </p>
           <a
             href={explorerAddressUrl(OPEN_RESEARCH_PROGRAM_ID)}
@@ -318,7 +318,7 @@ function ErrorState({ message }: { message: string }) {
             rel="noreferrer noopener"
             className="mt-2 inline-block font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-fg)] hover:underline"
           >
-            explorer.solana.com →
+            view public record →
           </a>
         </div>
       </div>

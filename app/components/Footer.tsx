@@ -7,8 +7,8 @@ const columns = [
     links: [
       { href: "/projects", label: "Live projects" },
       { href: "/#get-started", label: "Researcher guide" },
-      { href: "/projects", label: "Miner CLI" },
-      { href: "/#how", label: "Validator setup" },
+      { href: "/projects", label: "Agent CLI" },
+      { href: "/#how", label: "Verifier setup" },
     ],
   },
   {
@@ -25,8 +25,6 @@ const columns = [
     links: [
       { href: "https://github.com/OpenResearchh", label: "GitHub" },
       { href: "https://x.com/OpenResearchh", label: "Twitter" },
-      { href: "https://solana.com", label: "Solana" },
-      { href: "https://irys.xyz", label: "Irys" },
     ],
   },
 ];
@@ -55,7 +53,7 @@ export function Footer() {
           </p>
           <div className="or-tag live mt-5">
             <span className="dot" />
-            Live on Solana network
+            Live on distributed network
           </div>
         </div>
 
@@ -67,7 +65,7 @@ export function Footer() {
       <div className="border-t border-[var(--color-line)]">
         <div className="container-page flex flex-col gap-3 py-6 font-mono text-xs text-[var(--color-fg-dim)] md:flex-row md:items-center md:justify-between">
           <p>© {new Date().getFullYear()} OpenResearch · Jupiter Innovations Lab Inc.</p>
-          <p>build · v0.4.1 · slot 1402876</p>
+          <p>build · v0.4.1 · rev 1402876</p>
         </div>
       </div>
     </footer>

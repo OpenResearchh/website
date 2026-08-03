@@ -21,13 +21,13 @@ const accents: Record<string, RoleAccent> = {
     bg: "rgb(245 191 80 / 0.08)",
     glow: "rgb(245 191 80 / 0.22)",
   },
-  miner: {
+  agent: {
     text: "var(--color-accent)",
     border: "rgb(74 222 188 / 0.45)",
     bg: "rgb(74 222 188 / 0.08)",
     glow: "rgb(74 222 188 / 0.22)",
   },
-  validator: {
+  verifier: {
     text: "var(--color-rose)",
     border: "rgb(248 113 113 / 0.45)",
     bg: "rgb(248 113 113 / 0.08)",
@@ -45,29 +45,29 @@ const steps: {
   {
     role: "researcher",
     title: "Publishes the project",
-    body: "Provide a GitHub repo. The agent derives the project setup, generates a benchmark, runs a baseline in a sandbox, and writes the immutable project record on-chain.",
-    io: { in: "github repo", out: "on-chain project" },
+    body: "Provide a GitHub repo. The agent derives the project setup, generates a benchmark, runs a baseline in a sandbox, and writes the immutable project record to the network.",
+    io: { in: "github repo", out: "network project" },
     Icon: ResearcherIcon,
   },
   {
     role: "registry",
-    title: "Mints a project token",
-    body: "A bonding-curve ProjectToken is deployed. Protocol, repo snapshot, benchmark suite, and baseline score are pinned to immutable storage with Solana root hashes.",
-    io: { in: "project record", out: "bonding curve" },
+    title: "Issues project credits",
+    body: "A dynamic-pricing credit is issued. Protocol, repo snapshot, benchmark suite, and baseline score are pinned to permanent storage with content fingerprints.",
+    io: { in: "project record", out: "pricing curve" },
     Icon: RegistryIcon,
   },
   {
-    role: "miner",
+    role: "agent",
     title: "Runs the AutoResearch loop",
-    body: "Local agent iterates: hypothesize, implement, benchmark, keep only improvements. When a result beats the network best, the miner stakes and submits a proposal.",
+    body: "Local agent iterates: hypothesize, implement, benchmark, keep only improvements. When a result beats the network best, the agent commits and submits a proposal.",
     io: { in: "hypothesis", out: "new best" },
     Icon: MinerIcon,
   },
   {
-    role: "validator",
-    title: "Attests inside a TEE",
-    body: "Allowlisted enclaves re-run the benchmark in hardware and sign the result. Valid proposals return the stake and mint rewards. Invalid ones get slashed.",
-    io: { in: "proposal", out: "signed attestation" },
+    role: "verifier",
+    title: "Verifies in secure hardware",
+    body: "Allowlisted verifier nodes re-run the benchmark in secure hardware and sign the result. Valid proposals return the commitment and issue rewards. Invalid ones are forfeited.",
+    io: { in: "proposal", out: "signed verification" },
     Icon: ValidatorIcon,
   },
 ];
@@ -84,7 +84,7 @@ export function HowItWorks() {
               <span className="serif">One verifiable benchmark.</span>
             </>
           }
-          description="OpenResearch separates the people who define problems, the people who improve them, and the machines that verify them, and binds all three with cryptography."
+          description="OpenResearch separates the people who define problems, the people who improve them, and the machines that verify them, and binds all three with verifiable proof."
         />
 
         <div className="relative mt-16">

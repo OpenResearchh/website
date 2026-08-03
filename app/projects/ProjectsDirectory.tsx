@@ -73,7 +73,7 @@ const registryFilters: { id: FilterId; label: string }[] = [
   { id: "accepted", label: "accepted best" },
   { id: "baseline", label: "baseline only" },
   { id: "open-pool", label: "open pool" },
-  { id: "minted", label: "minted supply" },
+  { id: "minted", label: "issued supply" },
 ];
 
 function bi(value: string): bigint {
@@ -207,7 +207,7 @@ export function ProjectsDirectory({
                   <tr className="border-b border-[var(--color-line)]">
                     {[
                       "Project",
-                      "Token",
+                      "Credit",
                       "Baseline",
                       "Best",
                       "Delta",
@@ -291,7 +291,7 @@ function ProjectsToolbar({
       <input
         value={query}
         onChange={(event) => setQuery(event.target.value)}
-        placeholder="$ search project, miner, cid..."
+        placeholder="$ search project, agent, id..."
         className="rounded-[var(--radius-sm)] border border-[var(--color-line-2)] bg-[var(--color-bg)] px-4 py-3 font-mono text-[13px] text-[var(--color-fg)] placeholder:text-[var(--color-fg-dim)] focus:border-[var(--color-accent)] focus:outline-none"
       />
 
@@ -349,7 +349,7 @@ function ProjectRow({
         <div className="mt-1.5 flex items-center gap-2 font-mono text-[11px] text-[var(--color-fg-muted)]">
           <span className="text-[var(--color-fg)]">{project.tokenSymbol}</span>
           <span className="text-[var(--color-fg-dim)]">·</span>
-          <span>cid {shortHash(project.protocolHash, 6, 4)}</span>
+          <span>id {shortHash(project.protocolHash, 6, 4)}</span>
           <span className="text-[var(--color-fg-dim)]">·</span>
           <span title={`${project.primaryMetricName} · ${project.primaryMetricDirection}`}>
             {project.primaryMetricName}
@@ -498,7 +498,7 @@ function RegistrySnapshot({
         Registry <span className="serif">activity</span>
       </h2>
       <p className="mt-3 max-w-xl font-sans text-[15px] leading-relaxed text-[var(--color-fg-muted)]">
-        Chronological on-chain events — project publications and miner
+        Chronological network events — project publications and agent
         proposals — sorted by submission time.
       </p>
 
@@ -509,12 +509,12 @@ function RegistrySnapshot({
           </span>
           <span className="or-tag">
             <span className="dot" />
-            on-chain data
+            network data
           </span>
         </div>
         {visible.length === 0 ? (
           <div className="px-4 py-6 font-sans text-sm text-[var(--color-fg-muted)]">
-            No on-chain activity yet.
+            No network activity yet.
           </div>
         ) : (
           visible.map((item) => (
@@ -628,16 +628,16 @@ function TopMiners({ projects }: { projects: ProjectListItem[] }) {
     <div>
       <p className="label">/ leaderboard</p>
       <h2 className="mt-4 font-sans text-3xl font-medium tracking-tight text-[var(--color-fg)] md:text-[34px]">
-        Top <span className="serif">miners</span>
+        Top <span className="serif">agents</span>
       </h2>
       <p className="mt-3 max-w-xl font-sans text-[15px] leading-relaxed text-[var(--color-fg-muted)]">
-        Real current-best miners, aggregated across listed projects.
+        Real current-best agents, aggregated across listed projects.
       </p>
 
       <div className="mt-8 border border-[var(--color-line)] bg-[var(--color-bg-soft)]">
         <div className="flex items-center justify-between border-b border-[var(--color-line)] px-4 py-3">
           <span className="font-mono text-[11px] text-[var(--color-fg-dim)]">
-            / top miners
+            / top agents
           </span>
           <span className="or-tag">
             <span className="dot" />
@@ -647,7 +647,7 @@ function TopMiners({ projects }: { projects: ProjectListItem[] }) {
         {miners.length === 0 ? (
           <div className="p-5">
             <p className="font-sans text-sm text-[var(--color-fg-muted)]">
-              No accepted miner proposals yet.
+              No accepted agent proposals yet.
             </p>
             <div className="mt-4 flex items-center gap-3 border border-[var(--color-line)] bg-[var(--color-bg)] px-4 py-3">
               <span className="font-mono text-sm text-[var(--color-fg-dim)] select-none">
@@ -658,7 +658,7 @@ function TopMiners({ projects }: { projects: ProjectListItem[] }) {
               </code>
               <CopyTextButton
                 text={MINE_INSTALL_CMD}
-                label="Copy mining skill install command"
+                label="Copy agent skill install command"
                 variant="icon"
               />
             </div>

@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "OpenResearch - decentralized agent-driven research powered by benchmarks";
+  "OpenResearch - distributed agent-driven research powered by benchmarks";
 export const size = {
   width: 1200,
   height: 630,

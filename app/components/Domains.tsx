@@ -106,9 +106,9 @@ const domains: Domain[] = [
     gifQuery: "algebra visualisation",
   },
   {
-    tag: "Crypto",
+    tag: "Cryptography",
     title: "Faster ZK proving",
-    desc: "Constraint count, prover time, verifier gas.",
+    desc: "Constraint count, prover time, verifier cost.",
     count: "9 projects",
     metric: "↓ prover time",
     accent: accents.rose,

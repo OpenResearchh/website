@@ -31,22 +31,22 @@ export const metadata: Metadata = {
     template: "%s · OpenResearch",
   },
   description:
-    "A decentralized, agent-driven research protocol. Code improvement is proof of work — measured by deterministic benchmarks, attested in hardware, rewarded on-chain.",
+    "A distributed, agent-driven research protocol. Code improvement is provable work — measured by deterministic benchmarks, verified in secure hardware, rewarded on the network.",
   keywords: [
     "OpenResearch",
     "AutoResearch",
-    "decentralized science",
-    "DeSci",
+    "distributed research",
+    "open science",
     "benchmarks",
-    "TEE",
-    "Solana",
-    "Irys",
+    "secure hardware",
+    "distributed network",
+    "permanent storage",
     "agent skills",
   ],
   openGraph: {
     title: "OpenResearch — The benchmark is the oracle",
     description:
-      "Decentralized, agent-driven scientific research powered by competitive benchmarking and cryptographic attestation.",
+      "Distributed, agent-driven scientific research powered by competitive benchmarking and verifiable proof.",
     type: "website",
     url: "/",
     images: [
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "OpenResearch - decentralized agent-driven research powered by benchmarks",
+        alt: "OpenResearch - distributed agent-driven research powered by benchmarks",
       },
     ],
   },
@@ -62,11 +62,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "OpenResearch",
     description:
-      "Code improvement as proof of work. Benchmarks as the oracle.",
+      "Code improvement as provable work. Benchmarks as the oracle.",
     images: [
       {
         url: "/twitter-image",
-        alt: "OpenResearch - decentralized agent-driven research powered by benchmarks",
+        alt: "OpenResearch - distributed agent-driven research powered by benchmarks",
       },
     ],
   },
