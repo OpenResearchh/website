@@ -10,6 +10,15 @@
  * home for the Soroban data layer as it comes online.
  */
 
+/**
+ * Which chain backs the live data surfaces. Defaults to the existing program
+ * client; set NEXT_PUBLIC_DATA_SOURCE=stellar to read from the Soroban contract.
+ */
+export const DATA_SOURCE = (
+  process.env.NEXT_PUBLIC_DATA_SOURCE ?? "solana"
+).toLowerCase();
+export const USE_STELLAR_DATA = DATA_SOURCE === "stellar";
+
 export const STELLAR_NETWORK =
   process.env.NEXT_PUBLIC_STELLAR_NETWORK ?? "testnet";
 
