@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Inter, Geist_Mono, Lora } from "next/font/google";
 import { Web3Provider } from "./web3-provider";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import "./globals.css";
 
-const geist = Geist({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-geist",
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -16,11 +16,11 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-const instrumentSerif = Instrument_Serif({
+const lora = Lora({
   subsets: ["latin"],
-  weight: "400",
+  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
+  variable: "--font-lora",
   display: "swap",
 });
 
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     "DeSci",
     "benchmarks",
     "TEE",
-    "Solana",
+    "Stellar",
     "Irys",
     "agent skills",
   ],
@@ -83,9 +83,18 @@ export default async function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
+      suppressHydrationWarning
+      className={`${inter.variable} ${geistMono.variable} ${lora.variable}`}
     >
       <body className="min-h-screen antialiased">
+        <script
+          // No-flash theme boot: light is default; honor a saved dark choice
+          // before first paint.
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var q=new URLSearchParams(location.search).get('theme');if(q==='dark'||q==='light'){localStorage.setItem('theme',q)}var t=localStorage.getItem('theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark')}else if(t==='light'){document.documentElement.removeAttribute('data-theme')}}catch(e){}",
+          }}
+        />
         <Web3Provider>{children}</Web3Provider>
       </body>
     </html>

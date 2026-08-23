@@ -172,14 +172,14 @@ export function ProjectTradeModal({
   const modal = (
     <div
       className="fixed inset-0 z-[10000] flex items-center justify-center p-4 sm:p-6"
-      style={{ backgroundColor: "rgb(0 0 0 / 0.92)" }}
+      style={{ backgroundColor: "rgb(15 15 15 / 0.45)" }}
       role="presentation"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div
-        className="pointer-events-auto max-h-[92vh] w-full max-w-md overflow-y-auto overscroll-contain rounded-xl border border-[var(--color-line)] bg-[var(--color-bg)] shadow-2xl ring-1 ring-[rgb(255_255_255_/_0.06)] backdrop-blur-xl"
+        className="pointer-events-auto max-h-[92vh] w-full max-w-md overflow-y-auto overscroll-contain rounded-xl border border-[var(--color-line)] bg-[var(--color-bg-soft)] shadow-2xl ring-1 ring-[rgb(var(--ink)_/_0.08)] backdrop-blur-xl"
         role="dialog"
         aria-modal="true"
         aria-labelledby="trade-modal-title"
@@ -195,14 +195,15 @@ export function ProjectTradeModal({
                 Trade {tokenSymbol}
               </h2>
               <p className="mt-1.5 max-w-md font-mono text-xs leading-snug text-[var(--color-fg-muted)]">
-                Bonding curve on Solana devnet. Project tokens are SPL tokens
-                with {decimals} decimals.
+                On-chain bonding curve. Project tokens are minted on a fixed
+                curve with {decimals} decimals — the price rises as supply
+                grows.
               </p>
             </div>
             <button
               type="button"
               onClick={onClose}
-              className="shrink-0 rounded-md border border-[var(--color-line)] bg-[var(--color-bg-soft)] px-2.5 py-1 font-mono text-sm text-[var(--color-fg-muted)] transition-colors hover:border-[var(--color-brand)] hover:text-[var(--color-brand-bright)]"
+              className="shrink-0 rounded-md border border-[var(--color-line)] bg-[var(--color-bg-soft)] px-2.5 py-1 font-mono text-sm text-[var(--color-fg-muted)] transition-colors hover:border-[var(--color-brand-line)] hover:text-[var(--color-accent)]"
               aria-label="Close"
             >
               x
@@ -217,13 +218,13 @@ export function ProjectTradeModal({
               {wallet.publicKey ? (
                 <div className="min-w-0 font-mono text-xs">
                   <span className="text-[var(--color-fg-dim)]">Connected · </span>
-                  <span className="break-all text-[var(--color-brand-bright)]">
+                  <span className="break-all text-[var(--color-accent)]">
                     {shortAddress(wallet.publicKey.toBase58())}
                   </span>
                 </div>
               ) : (
                 <p className="font-mono text-xs text-[var(--color-fg-muted)]">
-                  Connect a Solana wallet to trade.
+                  Connect a wallet to trade.
                 </p>
               )}
               <WalletMultiButton />
@@ -232,8 +233,8 @@ export function ProjectTradeModal({
             {wallet.publicKey ? (
               <div className="mt-4 grid grid-cols-2 gap-3 border-t border-[var(--color-line)] pt-4">
                 <BalanceStat
-                  label="SOL"
-                  value={solBalance === null ? "..." : `${formatSol(solBalance)} SOL`}
+                  label="XLM"
+                  value={solBalance === null ? "..." : `${formatSol(solBalance)} XLM`}
                 />
                 <BalanceStat
                   label={`${tokenSymbol} balance`}
@@ -259,10 +260,10 @@ export function ProjectTradeModal({
           <section className="overflow-hidden rounded-xl border border-[var(--color-line)] bg-[var(--color-bg-soft)]">
             <div className="flex p-1">
               <ModeButton active={tradeMode === "buy"} onClick={() => setTradeMode("buy")}>
-                Buy with SOL
+                Buy with XLM
               </ModeButton>
               <ModeButton active={tradeMode === "sell"} onClick={() => setTradeMode("sell")}>
-                Sell for SOL
+                Sell for XLM
               </ModeButton>
             </div>
 
@@ -282,10 +283,10 @@ export function ProjectTradeModal({
                         className="min-w-0 flex-1 bg-transparent font-mono text-lg tabular-nums text-[var(--color-fg)] outline-none disabled:opacity-50"
                         inputMode="decimal"
                         placeholder="0"
-                        aria-label="Amount in SOL"
+                        aria-label="Amount in XLM"
                       />
                       <span className="shrink-0 rounded bg-[var(--color-bg-soft)] px-2 py-1 font-mono text-xs font-medium text-[var(--color-fg-muted)]">
-                        SOL
+                        XLM
                       </span>
                     </div>
                   </div>
@@ -308,7 +309,7 @@ export function ProjectTradeModal({
                     type="button"
                     onClick={() => void onBuy()}
                     disabled={!walletReady || busy || lamportsIn <= 0n}
-                    className="w-full rounded-lg border border-[var(--color-green)] bg-[rgb(69_181_165_/_0.14)] py-3 font-mono text-sm font-semibold text-[var(--color-green)] transition-colors hover:bg-[rgb(69_181_165_/_0.22)] disabled:opacity-40"
+                    className="btn-brand w-full justify-center py-3 font-mono text-sm font-semibold disabled:opacity-40"
                   >
                     {busy ? "Confirming..." : `Buy ${tokenSymbol}`}
                   </button>
@@ -322,7 +323,7 @@ export function ProjectTradeModal({
                         <button
                           type="button"
                           onClick={() => setSellTokens(tokenBalance.toString())}
-                          className="text-[var(--color-brand)] hover:underline"
+                          className="text-[var(--color-accent)] hover:underline"
                         >
                           Max: {formatTokenAmount(tokenBalance, decimals)} {tokenSymbol}
                         </button>
@@ -345,13 +346,13 @@ export function ProjectTradeModal({
                   </div>
                   <QuoteBox
                     label="You receive"
-                    value={sellAmount > 0n ? `~ ${formatSol(sellQuote)} SOL` : "-"}
+                    value={sellAmount > 0n ? `~ ${formatSol(sellQuote)} XLM` : "-"}
                   />
                   <button
                     type="button"
                     onClick={() => void onSell()}
                     disabled={!walletReady || busy || sellAmount <= 0n}
-                    className="w-full rounded-lg border border-[var(--color-line)] bg-[var(--color-bg)] py-3 font-mono text-sm font-semibold text-[var(--color-fg-muted)] transition-colors hover:border-[var(--color-brand)] hover:text-[var(--color-brand-bright)] disabled:opacity-40"
+                    className="w-full rounded-lg border border-[var(--color-green)] bg-[rgb(18_134_111_/_0.12)] py-3 font-mono text-sm font-semibold text-[var(--color-green)] transition-colors hover:bg-[rgb(18_134_111_/_0.2)] disabled:opacity-40"
                   >
                     {busy ? "Confirming..." : `Sell ${tokenSymbol}`}
                   </button>
@@ -375,7 +376,7 @@ export function ProjectTradeModal({
               href={explorerTxUrl(txSig)}
               target="_blank"
               rel="noreferrer noopener"
-              className="block rounded-md border border-[var(--color-line)] bg-[var(--color-bg-soft)] p-3 font-mono text-xs text-[var(--color-brand-bright)] underline-offset-4 hover:underline"
+              className="block rounded-md border border-[var(--color-line)] bg-[var(--color-bg-soft)] p-3 font-mono text-xs text-[var(--color-accent)] underline-offset-4 hover:underline"
             >
               Transaction {shortAddress(txSig)} on explorer
             </a>

@@ -50,16 +50,16 @@ export function FlowDiagram() {
       >
         <defs>
           <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="rgba(255,255,255,0.25)" />
-            <stop offset="100%" stopColor="rgba(74,222,188,0.75)" />
+            <stop offset="0%" style={{ stopColor: "rgb(var(--ink) / 0.2)" }} />
+            <stop offset="100%" stopColor="rgba(184,134,11,0.85)" />
           </linearGradient>
           <linearGradient id="lineGradBack" x1="1" y1="0" x2="0" y2="0">
-            <stop offset="0%" stopColor="rgba(255,255,255,0.25)" />
-            <stop offset="100%" stopColor="rgba(96,165,250,0.75)" />
+            <stop offset="0%" style={{ stopColor: "rgb(var(--ink) / 0.2)" }} />
+            <stop offset="100%" stopColor="rgba(11,74,143,0.85)" />
           </linearGradient>
           <radialGradient id="nodeGlow" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0%" stopColor="rgba(74,222,188,0.55)" />
-            <stop offset="100%" stopColor="rgba(74,222,188,0)" />
+            <stop offset="0%" stopColor="rgba(253,218,36,0.55)" />
+            <stop offset="100%" stopColor="rgba(253,218,36,0)" />
           </radialGradient>
           <pattern
             id="dotgrid"
@@ -69,14 +69,14 @@ export function FlowDiagram() {
             height="28"
             patternUnits="userSpaceOnUse"
           >
-            <circle cx="1" cy="1" r="0.8" fill="rgba(255,255,255,0.07)" />
+            <circle cx="1" cy="1" r="0.8" style={{ fill: "rgb(var(--ink) / 0.06)" }} />
           </pattern>
         </defs>
 
         <rect width={W} height={H} fill="url(#dotgrid)" />
 
         <g
-          stroke="rgba(255,255,255,0.08)"
+          style={{ stroke: "rgb(var(--ink) / 0.1)" }}
           strokeDasharray="3 6"
           strokeWidth="1"
         >
@@ -90,7 +90,7 @@ export function FlowDiagram() {
           fontSize="12"
           fontWeight="600"
           letterSpacing="2"
-          fill="rgba(255,255,255,0.55)"
+          style={{ fill: "rgb(var(--ink) / 0.55)" }}
         >
           <text x={PAD_X} y="70">
             01 · CREATE
@@ -128,7 +128,7 @@ export function FlowDiagram() {
           x={790}
           y={100}
           label="PROJECT"
-          sub="Sol: 4kZ…x4q"
+          sub="XLM: 4kZ…x4q"
           icon="hash"
           highlight
         />
@@ -244,7 +244,7 @@ export function FlowDiagram() {
         <path
           d="M 865 470 C 920 470, 955 454, 1008 454"
           fill="none"
-          stroke="rgba(74,222,188,0.58)"
+          stroke="rgba(18,134,111,0.6)"
           strokeWidth="1.5"
           strokeDasharray="4 6"
         >
@@ -259,7 +259,7 @@ export function FlowDiagram() {
         <path
           d="M 865 470 C 922 470, 958 494, 1008 494"
           fill="none"
-          stroke="rgba(248,113,113,0.45)"
+          stroke="rgba(192,57,43,0.45)"
           strokeWidth="1.5"
           strokeDasharray="4 6"
         >
@@ -277,21 +277,21 @@ export function FlowDiagram() {
             width="170"
             height="30"
             rx="4"
-            fill="rgba(74,222,188,0.1)"
-            stroke="rgba(74,222,188,0.55)"
+            fill="rgba(18,134,111,0.1)"
+            stroke="rgba(18,134,111,0.55)"
             strokeWidth="1.4"
           />
-          <circle cx="16" cy="15" r="4.5" fill="rgba(74,222,188,1)" />
+          <circle cx="16" cy="15" r="4.5" fill="rgba(18,134,111,1)" />
           <text
             x="30"
             y="20"
             fontFamily="Geist Mono, monospace"
             fontSize="11"
             fontWeight="600"
-            fill="rgba(74,222,188,1)"
+            fill="rgba(18,134,111,1)"
             letterSpacing="1"
           >
-            VALID → +SOL
+            VALID → +XLM
           </text>
         </g>
         <g transform="translate(1010,478)">
@@ -299,18 +299,18 @@ export function FlowDiagram() {
             width="170"
             height="30"
             rx="4"
-            fill="rgba(248,113,113,0.08)"
-            stroke="rgba(248,113,113,0.5)"
+            fill="rgba(192,57,43,0.08)"
+            stroke="rgba(192,57,43,0.5)"
             strokeWidth="1.4"
           />
-          <circle cx="16" cy="15" r="4.5" fill="rgba(248,113,113,0.95)" />
+          <circle cx="16" cy="15" r="4.5" fill="rgba(192,57,43,0.95)" />
           <text
             x="30"
             y="20"
             fontFamily="Geist Mono, monospace"
             fontSize="11"
             fontWeight="600"
-            fill="rgba(248,113,113,0.95)"
+            fill="rgba(192,57,43,0.95)"
             letterSpacing="1"
           >
             INVALID → SLASH
@@ -338,7 +338,7 @@ export function FlowDiagram() {
           fontFamily="Geist Mono, monospace"
           fontSize="11"
           fontWeight="600"
-          fill="rgba(96,165,250,0.95)"
+          fill="rgba(11,74,143,0.95)"
           letterSpacing="1.5"
           textAnchor="middle"
           transform="rotate(90 1162 228)"
@@ -387,7 +387,7 @@ function MinerRacePaths({
             key={path.d}
             d={path.d}
             fill="none"
-            stroke={on ? "rgba(74,222,188,0.78)" : "rgba(255,255,255,0.14)"}
+            style={{ stroke: on ? "rgba(184,134,11,0.85)" : "rgb(var(--ink) / 0.14)" }}
             strokeWidth={on ? "2" : "1.2"}
             strokeDasharray="5 7"
             opacity={on ? 1 : 0.55}
@@ -408,7 +408,7 @@ function MinerRacePaths({
         fontFamily="Geist Mono, monospace"
         fontSize="9"
         fontWeight="600"
-        fill="rgba(74,222,188,0.72)"
+        fill="rgba(184,134,11,0.9)"
         letterSpacing="1"
         textAnchor="middle"
       >
@@ -444,10 +444,10 @@ function FlowNode({
         width={w}
         height={h}
         rx="5"
-        fill="rgba(12,16,22,0.96)"
-        stroke={
-          highlight ? "rgba(74,222,188,0.85)" : "rgba(255,255,255,0.28)"
-        }
+        fill="var(--color-bg-soft)"
+        style={{
+          stroke: highlight ? "rgba(184,134,11,0.85)" : "rgb(var(--ink) / 0.18)",
+        }}
         strokeWidth={highlight ? 1.8 : 1.4}
       />
       <g transform="translate(12,16)">
@@ -459,7 +459,7 @@ function FlowNode({
         fontFamily="Geist Mono, monospace"
         fontSize="11"
         fontWeight="600"
-        fill={highlight ? "rgba(74,222,188,1)" : "rgba(255,255,255,0.95)"}
+        style={{ fill: highlight ? "#b8860b" : "rgb(var(--ink) / 0.95)" }}
         letterSpacing="1.2"
       >
         {label}
@@ -470,7 +470,7 @@ function FlowNode({
         fontFamily="Geist Mono, monospace"
         fontSize="10"
         fontWeight="500"
-        fill="rgba(255,255,255,0.6)"
+        style={{ fill: "rgb(var(--ink) / 0.55)" }}
       >
         {sub}
       </text>
@@ -479,11 +479,11 @@ function FlowNode({
 }
 
 function NodeIcon({ kind, highlight }: { kind: IconKind; highlight?: boolean }) {
-  const c = highlight ? "rgba(74,222,188,1)" : "rgba(255,255,255,0.85)";
+  const c = highlight ? "#b8860b" : "rgb(var(--ink) / 0.8)";
   const sw = 1.6;
   if (kind === "user")
     return (
-      <g stroke={c} strokeWidth={sw} fill="none">
+      <g style={{ stroke: c }} strokeWidth={sw} fill="none">
         <circle cx="9" cy="7" r="3.5" />
         <path d="M3 18 C 3 13, 15 13, 15 18" />
       </g>
@@ -491,20 +491,20 @@ function NodeIcon({ kind, highlight }: { kind: IconKind; highlight?: boolean }) 
   if (kind === "git")
     return (
       <g>
-        <circle cx="5" cy="5" r="2.5" fill="none" stroke={c} strokeWidth={sw} />
-        <circle cx="13" cy="13" r="2.5" fill="none" stroke={c} strokeWidth={sw} />
-        <line x1="6.5" y1="7" x2="11.5" y2="11" stroke={c} strokeWidth={sw} />
+        <circle cx="5" cy="5" r="2.5" fill="none" style={{ stroke: c }} strokeWidth={sw} />
+        <circle cx="13" cy="13" r="2.5" fill="none" style={{ stroke: c }} strokeWidth={sw} />
+        <line x1="6.5" y1="7" x2="11.5" y2="11" style={{ stroke: c }} strokeWidth={sw} />
       </g>
     );
   if (kind === "hash")
     return (
-      <g stroke={c} strokeWidth={sw} fill="none">
+      <g style={{ stroke: c }} strokeWidth={sw} fill="none">
         <path d="M2 7h14M2 12h14M6 2v17M12 2v17" />
       </g>
     );
   if (kind === "chart")
     return (
-      <g fill={c}>
+      <g style={{ fill: c }}>
         <rect x="2" y="12" width="3" height="6" />
         <rect x="7" y="7" width="3" height="11" />
         <rect x="12" y="3" width="3" height="15" />
@@ -512,7 +512,7 @@ function NodeIcon({ kind, highlight }: { kind: IconKind; highlight?: boolean }) 
     );
   if (kind === "cpu")
     return (
-      <g stroke={c} strokeWidth={sw} fill="none">
+      <g style={{ stroke: c }} strokeWidth={sw} fill="none">
         <rect x="3" y="3" width="13" height="13" rx="1.5" />
         <rect x="7" y="7" width="5" height="5" />
         <path d="M9 0v3M9 16v3M0 9h3M16 9h3" />
@@ -523,7 +523,7 @@ function NodeIcon({ kind, highlight }: { kind: IconKind; highlight?: boolean }) 
       <path
         d="M9 1 L15 4 V10 C15 13.5, 9 17, 9 17 C9 17, 3 13.5, 3 10 V4 Z"
         fill="none"
-        stroke={c}
+        style={{ stroke: c }}
         strokeWidth={sw}
       />
     );
@@ -531,7 +531,7 @@ function NodeIcon({ kind, highlight }: { kind: IconKind; highlight?: boolean }) 
     return (
       <path
         d="M3 9 L7 13 L15 4"
-        stroke={c}
+        style={{ stroke: c }}
         strokeWidth="2"
         fill="none"
         strokeLinecap="round"
@@ -561,7 +561,7 @@ function FlowEdge({
         y1={y1}
         x2={x2}
         y2={y2}
-        stroke="rgba(255,255,255,0.22)"
+        style={{ stroke: "rgb(var(--ink) / 0.2)" }}
         strokeWidth="1.4"
         strokeDasharray={dashed ? "4 6" : undefined}
       />
@@ -569,7 +569,7 @@ function FlowEdge({
         cx={x1 + (x2 - x1) * progress}
         cy={y1 + (y2 - y1) * progress}
         r="3"
-        fill="rgba(74,222,188,1)"
+        fill="#b8860b"
       >
         <animate
           attributeName="r"
@@ -580,7 +580,7 @@ function FlowEdge({
       </circle>
       <polygon
         points={`${x2},${y2} ${x2 - 8},${y2 - 4} ${x2 - 8},${y2 + 4}`}
-        fill="rgba(255,255,255,0.55)"
+        style={{ fill: "rgb(var(--ink) / 0.5)" }}
       />
     </g>
   );
@@ -588,7 +588,7 @@ function FlowEdge({
 
 function Particle({ path, delay }: { path: string; delay: number }) {
   return (
-    <circle r="3" fill="rgba(74,222,188,1)">
+    <circle r="3" fill="#b8860b">
       <animateMotion
         dur="3s"
         repeatCount="indefinite"
@@ -613,8 +613,8 @@ function KarpathyLoop({ x, y, t }: { x: number; y: number; t: number }) {
     <g transform={`translate(${x}, ${y})`}>
       <circle
         r={r}
-        fill="rgba(74,222,188,0.03)"
-        stroke="rgba(255,255,255,0.25)"
+        fill="rgba(253,218,36,0.06)"
+        style={{ stroke: "rgb(var(--ink) / 0.2)" }}
         strokeWidth="1.4"
         strokeDasharray="3 5"
       />
@@ -624,7 +624,7 @@ function KarpathyLoop({ x, y, t }: { x: number; y: number; t: number }) {
         fontFamily="Geist Mono, monospace"
         fontSize="11"
         fontWeight="600"
-        fill="rgba(74,222,188,1)"
+        fill="#b8860b"
         letterSpacing="1.2"
       >
         KARPATHY
@@ -635,19 +635,19 @@ function KarpathyLoop({ x, y, t }: { x: number; y: number; t: number }) {
         fontFamily="Geist Mono, monospace"
         fontSize="11"
         fontWeight="600"
-        fill="rgba(74,222,188,1)"
+        fill="#b8860b"
         letterSpacing="1.2"
       >
         LOOP
       </text>
       <g transform={`rotate(${angle})`}>
-        <circle cx={r} cy={0} r="4" fill="rgba(74,222,188,1)" />
+        <circle cx={r} cy={0} r="4" fill="#b8860b" />
         <circle
           cx={r}
           cy={0}
           r="8"
           fill="none"
-          stroke="rgba(74,222,188,0.4)"
+          stroke="rgba(184,134,11,0.4)"
           strokeWidth="1"
         />
       </g>
@@ -655,7 +655,7 @@ function KarpathyLoop({ x, y, t }: { x: number; y: number; t: number }) {
         fontFamily="Geist Mono, monospace"
         fontSize="9"
         fontWeight="600"
-        fill="rgba(255,255,255,0.7)"
+        style={{ fill: "rgb(var(--ink) / 0.6)" }}
         letterSpacing="0.5"
       >
         <text x={0} y={-r - 10} textAnchor="middle">

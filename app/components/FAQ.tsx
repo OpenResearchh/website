@@ -14,7 +14,7 @@ const items = [
   },
   {
     q: "Why blockchain, why now?",
-    a: "The network needs durable project storage, stakeable economic skin in the game, and immutable provenance for who improved what. Solana gives the reward and proof flow low-fee settlement.",
+    a: "The network needs durable project storage, stakeable economic skin in the game, and immutable provenance for who improved what. Stellar gives the reward and proof flow low-fee settlement.",
   },
   {
     q: "Can I bring my own benchmark?",
@@ -54,7 +54,7 @@ export function FAQ() {
                 key={item.q}
                 type="button"
                 onClick={() => setOpen(active ? -1 : i)}
-                className="block w-full border-b border-[var(--color-line)] py-6 text-left transition-colors hover:bg-[rgb(255_255_255_/_0.02)]"
+                className="block w-full border-b border-[var(--color-line)] py-6 text-left transition-colors hover:bg-[rgb(var(--ink)_/_0.03)]"
               >
                 <div className="grid grid-cols-[48px_1fr_32px] items-center gap-4 px-2 md:grid-cols-[72px_1fr_40px]">
                   <span className="tick text-sm text-[var(--color-accent)]">

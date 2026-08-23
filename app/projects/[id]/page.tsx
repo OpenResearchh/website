@@ -43,7 +43,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 30;
 
 /** Legacy header blurb when protocol.json has no `meta.purposeStatement` (older publishes). */
-const FALLBACK_PURPOSE_TITLE = "Immutable benchmark project on Solana devnet.";
+const FALLBACK_PURPOSE_TITLE = "Immutable benchmark project on-chain.";
 const FALLBACK_PURPOSE_BODY =
   "Artifacts are fetched from Irys by their on-chain Irys IDs and pinned alongside SHA-256 hashes. Beat the network best to earn tokens from the miner pool.";
 
@@ -61,7 +61,7 @@ export async function generateMetadata({
 
   return {
     title: `${project.tokenName} (${project.tokenSymbol}) · Project #${project.id}`,
-    description: `On-chain protocol, benchmark, and current best score for ${project.tokenName} on the OpenResearch Solana program.`,
+    description: `On-chain protocol, benchmark, and current best score for ${project.tokenName} on the OpenResearch registry.`,
   };
 }
 
@@ -135,7 +135,7 @@ function Breadcrumbs({ id, symbol }: { id: string; symbol: string }) {
         <nav className="font-mono text-xs text-[var(--color-fg-dim)]">
           <Link
             href="/projects"
-            className="underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline"
+            className="underline-offset-4 hover:text-[var(--color-accent)] hover:underline"
           >
             Back to all projects
           </Link>
@@ -250,7 +250,7 @@ function ProjectHeader({
           />
           <Stat
             label="Next price"
-            value={`${formatSol(currentPrice)} SOL`}
+            value={`${formatSol(currentPrice)} XLM`}
             sub={`supply ${formatTokenAmount(totalSupply, decimals)} ${project.tokenSymbol}`}
           />
           <Stat
@@ -394,7 +394,7 @@ function ProtocolPanel({
               target="_blank"
               rel="noreferrer noopener"
               title={irysId ? `${irysId} · ${hash}` : hash}
-              className="underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline"
+              className="underline-offset-4 hover:text-[var(--color-accent)] hover:underline"
             >
               {irysId ? shortAddress(irysId) : shortHash(hash, 10, 6)} ↗
             </a>
@@ -438,7 +438,7 @@ function ArtifactRender({
                 href={artifact.url}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline"
+                className="font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-accent)] hover:underline"
               >
                 Try the gateway directly →
               </a>
@@ -458,7 +458,7 @@ function ArtifactRender({
               href={artifact.url}
               target="_blank"
               rel="noreferrer noopener"
-              className="font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline"
+              className="font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-accent)] hover:underline"
             >
               Open in Irys gateway →
             </a>
@@ -621,21 +621,21 @@ function ScorePath({
             x2={width}
             y1={24 + i * 42}
             y2={24 + i * 42}
-            stroke="rgba(255,255,255,0.06)"
+            style={{ stroke: "rgb(var(--ink) / 0.06)" }}
           />
         ))}
         <path
           d={path}
           fill="none"
-          stroke="rgba(74,222,188,0.88)"
+          stroke="var(--color-accent)"
           strokeWidth="2"
         />
         {coords.map((point, i) => (
           <g key={`${point.label}-${i}`} transform={`translate(${point.x}, ${point.y})`}>
             <circle
               r={i === coords.length - 1 ? 5 : 3.5}
-              fill={i === coords.length - 1 ? "rgba(74,222,188,1)" : "var(--color-bg)"}
-              stroke="rgba(74,222,188,0.9)"
+              fill={i === coords.length - 1 ? "var(--color-accent)" : "var(--color-bg-soft)"}
+              stroke="var(--color-accent)"
               strokeWidth="1.6"
             />
           </g>
@@ -694,12 +694,12 @@ function ContributionGrid({ proposals }: { proposals: ProposalView[] }) {
             title={`${formatDate(day.date)} · ${day.count} proposal${day.count === 1 ? "" : "s"}`}
             className={`aspect-square rounded-[2px] border border-[var(--color-line)] ${
               day.count === 0
-                ? "bg-[rgb(255_255_255_/_0.025)]"
+                ? "bg-[var(--color-bg-2)]"
                 : day.count === 1
-                  ? "bg-[rgb(74_222_188_/_0.22)]"
+                  ? "bg-[rgb(253_218_36_/_0.4)]"
                   : day.count < 4
-                    ? "bg-[rgb(74_222_188_/_0.42)]"
-                    : "bg-[var(--color-accent)]"
+                    ? "bg-[rgb(253_218_36_/_0.75)]"
+                    : "bg-[var(--color-brand)]"
             }`}
           />
         ))}
@@ -778,7 +778,7 @@ function OnChainCard({
         <div className="border-b border-[var(--color-line)] px-5 py-4">
           <p className="label">On-chain</p>
           <p className="mt-1 font-mono text-base text-[var(--color-fg)]">
-            Solana devnet
+            Stellar
           </p>
           <p className="mt-1 font-mono text-xs text-[var(--color-fg-dim)]">
             program{" "}
@@ -855,7 +855,7 @@ function OnChainCard({
           </CardRow>
           <CardRow label="Next price">
             <span className="font-mono text-sm text-[var(--color-fg)]">
-              {formatSol(currentPrice)} SOL
+              {formatSol(currentPrice)} XLM
             </span>
           </CardRow>
           <CardRow label="Miner pool">
@@ -1123,7 +1123,7 @@ function HashRow({
           target="_blank"
           rel="noreferrer noopener"
           title={`${irysId} · ${hash}`}
-          className="font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline"
+          className="font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-accent)] hover:underline"
         >
           {shortAddress(irysId)} ↗
         </a>
@@ -1160,9 +1160,9 @@ function ErrorPage({
                 href={explorerAddressUrl(OPEN_RESEARCH_PROGRAM_ID)}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="mt-6 inline-block font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline"
+                className="mt-6 inline-block font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-accent)] hover:underline"
               >
-                Open Solana Explorer →
+                Open explorer →
               </a>
             </div>
           </div>

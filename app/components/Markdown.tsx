@@ -51,7 +51,7 @@ function renderInline(input: string, keyPrefix: string): ReactNode[] {
         return (
           <code
             key={key}
-            className="rounded bg-[var(--color-bg-soft)] px-1.5 py-0.5 font-mono text-[0.9em] text-[var(--color-fg)]"
+            className="rounded bg-[var(--color-bg-2)] px-1.5 py-0.5 font-mono text-[0.9em] text-[var(--color-fg)]"
           >
             {tok.value}
           </code>
@@ -75,7 +75,7 @@ function renderInline(input: string, keyPrefix: string): ReactNode[] {
             href={tok.href}
             target="_blank"
             rel="noreferrer noopener"
-            className="text-[var(--color-fg)] underline underline-offset-4 decoration-[var(--color-brand)] hover:text-[var(--color-brand-bright)] hover:decoration-[var(--color-brand-bright)]"
+            className="text-[var(--color-accent)] underline underline-offset-4 decoration-[var(--color-accent-dim)] hover:text-[var(--color-accent)] hover:decoration-[var(--color-accent)]"
           >
             {tok.value}
           </a>
@@ -271,7 +271,7 @@ export function Markdown({ source }: { source: string }) {
             return (
               <pre
                 key={key}
-                className="my-5 overflow-x-auto border border-[var(--color-line)] bg-[var(--color-bg-soft)] p-4 font-mono text-[12.5px] leading-relaxed text-[var(--color-fg)]"
+                className="my-5 overflow-x-auto border border-[var(--color-line)] bg-[var(--color-bg-2)] p-4 font-mono text-[12.5px] leading-relaxed text-[var(--color-fg)]"
               >
                 <code>{block.text}</code>
               </pre>
@@ -300,7 +300,7 @@ export function Markdown({ source }: { source: string }) {
             return (
               <blockquote
                 key={key}
-                className="my-5 border-l-2 border-[var(--color-brand)] pl-4 italic text-[var(--color-fg-dim)]"
+                className="my-5 border-l-2 border-[var(--color-brand-line)] pl-4 italic text-[var(--color-fg-dim)]"
               >
                 {renderInline(block.text, key)}
               </blockquote>

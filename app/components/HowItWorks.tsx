@@ -10,28 +10,28 @@ type RoleAccent = {
 
 const accents: Record<string, RoleAccent> = {
   researcher: {
-    text: "var(--color-cyan)",
-    border: "rgb(96 165 250 / 0.45)",
-    bg: "rgb(96 165 250 / 0.08)",
-    glow: "rgb(96 165 250 / 0.22)",
+    text: "#b8860b",
+    border: "rgb(214 176 20 / 0.5)",
+    bg: "rgb(253 218 36 / 0.12)",
+    glow: "rgb(253 218 36 / 0.3)",
   },
   registry: {
-    text: "var(--color-amber)",
-    border: "rgb(245 191 80 / 0.45)",
-    bg: "rgb(245 191 80 / 0.08)",
-    glow: "rgb(245 191 80 / 0.22)",
+    text: "#00a7b5",
+    border: "rgb(0 167 181 / 0.45)",
+    bg: "rgb(0 167 181 / 0.1)",
+    glow: "rgb(0 167 181 / 0.25)",
   },
   miner: {
-    text: "var(--color-accent)",
-    border: "rgb(74 222 188 / 0.45)",
-    bg: "rgb(74 222 188 / 0.08)",
-    glow: "rgb(74 222 188 / 0.22)",
+    text: "#0b4a8f",
+    border: "rgb(11 74 143 / 0.4)",
+    bg: "rgb(11 74 143 / 0.08)",
+    glow: "rgb(11 74 143 / 0.2)",
   },
   validator: {
-    text: "var(--color-rose)",
-    border: "rgb(248 113 113 / 0.45)",
-    bg: "rgb(248 113 113 / 0.08)",
-    glow: "rgb(248 113 113 / 0.22)",
+    text: "#7c6fc4",
+    border: "rgb(183 172 232 / 0.6)",
+    bg: "rgb(183 172 232 / 0.16)",
+    glow: "rgb(183 172 232 / 0.3)",
   },
 };
 
@@ -52,7 +52,7 @@ const steps: {
   {
     role: "registry",
     title: "Mints a project token",
-    body: "A bonding-curve ProjectToken is deployed. Protocol, repo snapshot, benchmark suite, and baseline score are pinned to immutable storage with Solana root hashes.",
+    body: "A bonding-curve ProjectToken is deployed. Protocol, repo snapshot, benchmark suite, and baseline score are pinned to immutable storage with on-chain root hashes.",
     io: { in: "project record", out: "bonding curve" },
     Icon: RegistryIcon,
   },
@@ -137,7 +137,7 @@ export function HowItWorks() {
                   </p>
 
                   <div className="role-io mt-5 flex items-center gap-2 font-mono text-[10px] tracking-[0.08em] text-[var(--color-fg-dim)] uppercase">
-                    <span className="rounded-sm border border-[var(--color-line-2)] bg-[rgb(255_255_255_/_0.02)] px-2 py-1">
+                    <span className="rounded-sm border border-[var(--color-line-2)] bg-[var(--color-bg-2)] px-2 py-1">
                       {step.io.in}
                     </span>
                     <span className="role-io-arrow" aria-hidden="true">
@@ -189,7 +189,7 @@ function FlowSpine() {
       aria-hidden="true"
     >
       <div className="relative h-px w-full overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,rgb(74_222_188_/_0.18)_15%,rgb(74_222_188_/_0.18)_85%,transparent_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,rgb(253_218_36_/_0.5)_15%,rgb(253_218_36_/_0.5)_85%,transparent_100%)]" />
         <span className="flow-spine-dot" />
       </div>
     </div>

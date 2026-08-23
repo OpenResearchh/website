@@ -91,8 +91,8 @@ export function CopyTextButton({
 
   const base =
     variant === "icon"
-      ? "inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded border border-[var(--color-line)] bg-[var(--color-bg)] text-[var(--color-brand)] transition-colors hover:border-[var(--color-brand)] hover:bg-[var(--color-brand-subtle)] hover:text-[var(--color-brand-bright)] "
-      : "shrink-0 cursor-pointer rounded border border-[var(--color-line)] bg-[var(--color-bg)] px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-[var(--color-brand-muted)] transition-colors hover:border-[var(--color-brand)] hover:text-[var(--color-brand-bright)] ";
+      ? "inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded border border-[var(--color-line)] bg-[var(--color-bg)] text-[var(--color-accent)] transition-colors hover:border-[var(--color-brand-line)] hover:bg-[var(--color-brand-subtle)] hover:text-[var(--color-accent)] "
+      : "shrink-0 cursor-pointer rounded border border-[var(--color-line)] bg-[var(--color-bg)] px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-[var(--color-fg-muted)] transition-colors hover:border-[var(--color-brand-line)] hover:text-[var(--color-accent)] ";
 
   return (
     <button
@@ -104,7 +104,7 @@ export function CopyTextButton({
     >
       {variant === "icon" ? (
         copied ? (
-          <IconCheck className="text-[var(--color-brand-bright)]" />
+          <IconCheck className="text-[var(--color-green)]" />
         ) : (
           <IconClipboard />
         )

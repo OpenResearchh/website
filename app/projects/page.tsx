@@ -34,7 +34,7 @@ export const revalidate = 30;
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "All OpenResearch projects published on the Solana devnet program, with current best scores, baselines, and project token prices.",
+    "All OpenResearch projects published to the on-chain registry, with current best scores, baselines, and project token prices.",
 };
 
 export default async function ProjectsPage() {
@@ -251,7 +251,7 @@ function NetStats({ projects }: { projects: ProjectListItem[] }) {
       {stats.map((stat, i) => (
         <div
           key={stat.label}
-          className={`net-stat group relative min-h-[112px] border-[var(--color-line)] px-5 py-5 transition-colors hover:bg-[rgb(255_255_255_/_0.02)] ${
+          className={`net-stat group relative min-h-[112px] border-[var(--color-line)] px-5 py-5 transition-colors hover:bg-[rgb(var(--ink)_/_0.02)] ${
             i % 2 === 0 ? "border-r" : ""
           } ${i < 4 ? "border-b xl:border-b-0" : ""} md:border-r md:[&:nth-child(3n)]:border-r-0 xl:[&:nth-child(3n)]:border-r xl:last:border-r-0`}
         >
@@ -304,7 +304,7 @@ function ErrorState({ message }: { message: string }) {
         <div className="border border-[var(--color-line)] bg-[var(--color-bg-soft)] px-8 py-12">
           <p className="label">Registry unavailable</p>
           <p className="mt-3 font-sans text-base text-[var(--color-fg)]">
-            Could not read the OpenResearch Solana program just now.
+            Could not read the OpenResearch registry just now.
           </p>
           <p className="mt-2 font-mono text-xs text-[var(--color-fg-dim)]">
             {message}
@@ -318,7 +318,7 @@ function ErrorState({ message }: { message: string }) {
             rel="noreferrer noopener"
             className="mt-2 inline-block font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-fg)] hover:underline"
           >
-            explorer.solana.com →
+            View on explorer →
           </a>
         </div>
       </div>

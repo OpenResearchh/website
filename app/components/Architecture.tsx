@@ -32,7 +32,7 @@ const layers = [
     n: "L5",
     name: "Protocol Registry",
     detail:
-      "Solana program accounts for projects, current best scores, Irys retrieval IDs, and artifact hashes.",
+      "On-chain program accounts for projects, current best scores, Irys retrieval IDs, and artifact hashes.",
   },
   {
     n: "L6",
@@ -85,7 +85,7 @@ export function Architecture() {
         </div>
 
         <div className="mt-14 grid grid-cols-1 border-t border-[var(--color-line)] sm:grid-cols-3">
-          <DeployRow label="Cluster" value="Solana devnet" />
+          <DeployRow label="Cluster" value="Stellar" />
           <DeployRow
             label="Program"
             value={shortAddress(OPEN_RESEARCH_PROGRAM_ID.toBase58())}
@@ -131,8 +131,8 @@ function DeployRow({
           href={href}
           target="_blank"
           rel="noreferrer noopener"
-          title={title ?? `View ${value} on Solana Explorer`}
-          className={`${valueClass} block underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline`}
+          title={title ?? `View ${value} on explorer`}
+          className={`${valueClass} block underline-offset-4 hover:text-[var(--color-accent)] hover:underline`}
         >
           {value}
         </a>
