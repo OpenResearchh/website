@@ -1,6 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import {
+  STELLAR_CONTRACT_ID,
+  STELLAR_NETWORK,
+  stellarContractUrl,
+  truncateStellarId,
+} from "@/lib/stellar/config";
 import { ArrowUpRight, GitHubMark, StellarMark, XMark } from "./icons";
 
 const TWITTER_URL = "https://x.com/OpenResearchh";
@@ -80,6 +86,33 @@ export function Footer() {
         {columns.map((col) => (
           <FooterCol key={col.title} title={col.title} links={col.links} />
         ))}
+      </div>
+
+      {/* On-chain contract — canonical protocol state lives here */}
+      <div className="border-t border-[var(--color-line)]">
+        <a
+          href={stellarContractUrl()}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="group container-page flex flex-wrap items-center gap-x-3 gap-y-2 py-5 font-mono text-xs text-[var(--color-fg-dim)] transition-colors hover:text-[var(--color-fg)]"
+        >
+          <span className="flex items-center gap-2 text-[var(--color-fg-muted)]">
+            <StellarMark size={13} className="text-[var(--color-fg)]" />
+            <span className="tracking-[0.06em] uppercase">
+              Contract · {STELLAR_NETWORK}
+            </span>
+          </span>
+          <code className="rounded-sm border border-[var(--color-line-2)] bg-[var(--color-bg-2)] px-2 py-1 text-[var(--color-fg-muted)] transition-colors group-hover:border-[var(--color-brand-line)]">
+            <span className="hidden sm:inline">{STELLAR_CONTRACT_ID}</span>
+            <span className="sm:hidden">
+              {truncateStellarId(STELLAR_CONTRACT_ID, 6, 6)}
+            </span>
+          </code>
+          <span className="inline-flex items-center gap-1 text-[var(--color-accent)]">
+            View on Stellar Expert
+            <ArrowUpRight size={12} />
+          </span>
+        </a>
       </div>
 
       <div className="border-t border-[var(--color-line)]">
