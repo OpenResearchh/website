@@ -32,12 +32,18 @@ import {
 } from "@/lib/openResearch/read";
 import { renderProtocolMarkdown } from "@/lib/openResearch/protocolMarkdown";
 import { priceAtSupply } from "@/lib/openResearch/trade";
+import { USE_STELLAR_DATA } from "@/lib/stellar/config";
+import {
+  getStellarOpenProposals,
+  getStellarProject,
+} from "@/lib/stellar/read";
 import { AddressLink } from "../../components/AddressLink";
 import { CopyTextButton } from "../../components/CopyTextButton";
 import { ProjectHeaderActions } from "../../components/ProjectHeaderActions";
 import { Footer } from "../../components/Footer";
 import { Markdown } from "../../components/Markdown";
 import { Nav } from "../../components/Nav";
+import { StellarProjectDetailView } from "./StellarProjectDetailView";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 30;
@@ -56,6 +62,15 @@ export async function generateMetadata({
   const projectId = Number.parseInt(id, 10);
   if (Number.isNaN(projectId)) return { title: "Project · Not found" };
 
+  if (USE_STELLAR_DATA) {
+    const project = await getStellarProject(projectId).catch(() => null);
+    if (!project) return { title: `Project #${id}` };
+    return {
+      title: `Project #${project.id} · Registry`,
+      description: `On-chain protocol, benchmark, and current best score for project #${project.id} on the OpenResearch contract.`,
+    };
+  }
+
   const project = await fetchProject(null, projectId).catch(() => null);
   if (!project) return { title: `Project #${id}` };
 
@@ -65,10 +80,44 @@ export async function generateMetadata({
   };
 }
 
+async function StellarProjectPage({ projectId }: { projectId: number }) {
+  let project: Awaited<ReturnType<typeof getStellarProject>> = null;
+  let registryError: string | null = null;
+  try {
+    project = await getStellarProject(projectId);
+  } catch (e) {
+    registryError = e instanceof Error ? e.message : "Failed to read the contract";
+  }
+
+  if (!project) {
+    if (registryError) {
+      return <ErrorPage projectId={projectId} message={registryError} />;
+    }
+    notFound();
+  }
+
+  const proposals = await getStellarOpenProposals(projectId).catch(() => []);
+
+  return (
+    <>
+      <Nav />
+      <main>
+        <StellarProjectDetailView project={project} proposals={proposals} />
+      </main>
+      <Footer />
+    </>
+  );
+}
+
 export default async function ProjectViewerPage({ params }: RouteProps) {
   const { id } = await params;
   const projectId = Number.parseInt(id, 10);
   if (!Number.isFinite(projectId) || projectId < 0) notFound();
+
+  if (USE_STELLAR_DATA) {
+    return <StellarProjectPage projectId={projectId} />;
+  }
+
   if (isProjectHiddenInUi(projectId)) notFound();
 
   let project: ProjectView | null = null;

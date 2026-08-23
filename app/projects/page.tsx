@@ -18,6 +18,8 @@ import {
   type ProjectView,
   type ProposalView,
 } from "@/lib/openResearch/read";
+import { USE_STELLAR_DATA } from "@/lib/stellar/config";
+import { listStellarProjects } from "@/lib/stellar/read";
 import { AddressLink } from "../components/AddressLink";
 import { Arrow } from "../components/atoms";
 import { Footer } from "../components/Footer";
@@ -27,6 +29,7 @@ import {
   type ProjectListItem,
   type RegistryEvent,
 } from "./ProjectsDirectory";
+import { StellarProjectsView } from "./StellarProjectsView";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 30;
@@ -38,6 +41,39 @@ export const metadata: Metadata = {
 };
 
 export default async function ProjectsPage() {
+  if (USE_STELLAR_DATA) {
+    return <StellarProjectsPage />;
+  }
+  return <SolanaProjectsPage />;
+}
+
+async function StellarProjectsPage() {
+  let projects: Awaited<ReturnType<typeof listStellarProjects>> = [];
+  let error: string | null = null;
+  try {
+    projects = await listStellarProjects();
+  } catch (e) {
+    error = e instanceof Error ? e.message : "Failed to read the contract";
+  }
+
+  return (
+    <>
+      <Nav />
+      <main>
+        {error ? (
+          <ErrorState message={error} />
+        ) : projects.length === 0 ? (
+          <EmptyState />
+        ) : (
+          <StellarProjectsView projects={projects} />
+        )}
+      </main>
+      <Footer />
+    </>
+  );
+}
+
+async function SolanaProjectsPage() {
   let projects: ProjectListItem[] = [];
   let events: RegistryEvent[] = [];
   let error: string | null = null;

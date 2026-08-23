@@ -148,3 +148,73 @@ export async function listStellarProjects(
   const results = await Promise.all(ids.map((id) => getStellarProject(id)));
   return results.filter((p): p is StellarProjectView => p !== null);
 }
+
+export interface StellarProposalView {
+  id: string;
+  projectId: string;
+  miner: string;
+  rewardRecipient: string;
+  status: "Submitted" | "Claimed" | "Approved" | "Rejected" | "Released" | "Expired";
+  claimedScore: string;
+  verifiedScore: string | null;
+  stake: string;
+  reviewer: string | null;
+  reviewLockUntil: string;
+  protocolEpoch: number;
+  candidateCommit: string;
+}
+
+function mapProposal(p: generated.Proposal): StellarProposalView {
+  return {
+    id: p.id.toString(),
+    projectId: p.project_id.toString(),
+    miner: p.miner,
+    rewardRecipient: p.reward_recipient,
+    status: (p.status?.tag ?? "Submitted") as StellarProposalView["status"],
+    claimedScore: p.claimed_score.toString(),
+    verifiedScore:
+      p.verified_score === undefined || p.verified_score === null
+        ? null
+        : p.verified_score.toString(),
+    stake: p.stake.toString(),
+    reviewer: p.reviewer ?? null,
+    reviewLockUntil: p.review_lock_until.toString(),
+    protocolEpoch: Number(p.protocol_epoch),
+    candidateCommit: p.candidate?.commit
+      ? formatCommitId(p.candidate.commit)
+      : "",
+  };
+}
+
+export async function getStellarProposal(
+  id: bigint | number,
+): Promise<StellarProposalView | null> {
+  try {
+    const tx = await getClient().get_proposal({ proposal_id: BigInt(id) });
+    const res = tx.result;
+    if (res.isErr()) return null;
+    return mapProposal(res.unwrap());
+  } catch {
+    return null;
+  }
+}
+
+/** Bounded active-review queue for a project (Submitted/Claimed proposals). */
+export async function getStellarOpenProposals(
+  projectId: bigint | number,
+): Promise<StellarProposalView[]> {
+  try {
+    const tx = await getClient().get_open_proposals({
+      project_id: BigInt(projectId),
+    });
+    const res = tx.result;
+    if (res.isErr()) return [];
+    const ids = res.unwrap();
+    const proposals = await Promise.all(
+      ids.map((id) => getStellarProposal(id)),
+    );
+    return proposals.filter((p): p is StellarProposalView => p !== null);
+  } catch {
+    return [];
+  }
+}

@@ -45,8 +45,34 @@ export function stellarContractUrl(
   return `https://stellar.expert/explorer/${STELLAR_NETWORK}/contract/${contractId}`;
 }
 
+/** stellar.expert explorer link for an account/address on the active network. */
+export function stellarAccountUrl(address: string): string {
+  return `https://stellar.expert/explorer/${STELLAR_NETWORK}/account/${address}`;
+}
+
 /** Middle-truncate a Stellar address/contract id for compact display. */
 export function truncateStellarId(id: string, lead = 4, tail = 4): string {
   if (id.length <= lead + tail + 1) return id;
   return `${id.slice(0, lead)}…${id.slice(-tail)}`;
+}
+
+/** 1 XLM = 10,000,000 stroops. Format a stroop amount (decimal string) as XLM. */
+export function formatStroopsToXlm(stroops: string, maxFractionDigits = 4): string {
+  let v: bigint;
+  try {
+    v = BigInt(stroops);
+  } catch {
+    return "0";
+  }
+  const negative = v < 0n;
+  if (negative) v = -v;
+  const whole = v / 10_000_000n;
+  const frac = v % 10_000_000n;
+  const fracStr = frac
+    .toString()
+    .padStart(7, "0")
+    .slice(0, maxFractionDigits)
+    .replace(/0+$/, "");
+  const num = `${whole.toLocaleString()}${fracStr ? `.${fracStr}` : ""}`;
+  return negative ? `-${num}` : num;
 }
