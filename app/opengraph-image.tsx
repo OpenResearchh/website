@@ -72,23 +72,39 @@ export default function Image() {
               flex: 1,
             }}
           >
+            <OpenResearchSymbol />
             <div
               style={{
                 display: "flex",
-                fontSize: 112,
+                marginTop: 18,
+                fontFamily: "Georgia, Times New Roman, serif",
+                fontSize: 94,
                 lineHeight: 1,
-                letterSpacing: 0,
-                fontWeight: 800,
+                letterSpacing: -2,
+                fontWeight: 500,
               }}
             >
-              OpenResearch
+              Open Research
             </div>
             <div
               style={{
                 display: "flex",
-                marginTop: 28,
+                marginTop: 14,
+                color: "#6b6f78",
+                fontSize: 16,
+                fontWeight: 600,
+                letterSpacing: 7,
+                textTransform: "uppercase",
+              }}
+            >
+              Decentralized protocol
+            </div>
+            <div
+              style={{
+                display: "flex",
+                marginTop: 26,
                 maxWidth: 820,
-                fontSize: 42,
+                fontSize: 36,
                 lineHeight: 1.16,
               }}
             >
@@ -137,5 +153,31 @@ export default function Image() {
       </div>
     ),
     size,
+  );
+}
+
+function OpenResearchSymbol() {
+  return (
+    <svg
+      width="470"
+      height="193"
+      viewBox="0 0 780 320"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path d="M26 274 478 156" stroke="#805CAD" strokeWidth="4" />
+      <path d="M26 283 478 156" stroke="#0E5AAA" strokeWidth="4" />
+      <path d="M26 292 478 156" stroke="#079B76" strokeWidth="4" />
+      <path d="M26 300 478 156" stroke="#F3C431" strokeWidth="4" />
+      <path d="M26 309 478 156" stroke="#D52E12" strokeWidth="4" />
+      <path
+        d="M396 12 547 275 246 275ZM478 156H723"
+        stroke="#000000"
+        strokeWidth="5.5"
+        strokeLinecap="square"
+        strokeLinejoin="miter"
+      />
+      <path d="m747 136 20 20-20 20-20-20Z" fill="#FBCA04" />
+    </svg>
   );
 }

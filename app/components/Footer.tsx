@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import {
@@ -8,6 +7,7 @@ import {
   truncateStellarId,
 } from "@/lib/stellar/config";
 import { ArrowUpRight, GitHubMark, StellarMark, XMark } from "./icons";
+import { BrandName, BrandSymbol } from "./BrandIdentity";
 
 const TWITTER_URL = "https://x.com/OpenResearchh";
 const GITHUB_URL = "https://github.com/OpenResearchh";
@@ -47,17 +47,15 @@ export function Footer() {
     <footer className="border-t border-[var(--color-line)] bg-[var(--color-bg-soft)]">
       <div className="container-page grid grid-cols-1 gap-10 py-14 md:grid-cols-[minmax(0,1.2fr)_repeat(3,minmax(120px,0.5fr))] md:py-18">
         <div>
-          <Link href="/" className="flex items-center gap-3">
-            <Image
-              src="/logos/icon.png"
-              alt=""
-              width={40}
-              height={40}
-              className="size-10"
-            />
-            <span className="font-mono text-base text-[var(--color-fg)]">
-              <span className="text-[var(--color-fg-dim)]">/</span>
-              OpenResearch
+          <Link
+            href="/"
+            aria-label="Open Research home"
+            className="group inline-flex flex-col items-start"
+          >
+            <BrandSymbol className="w-[188px]" sizes="188px" />
+            <BrandName className="mt-3 font-serif text-[27px] leading-none font-medium tracking-[-0.025em] text-[var(--color-fg)] transition-colors group-hover:text-[var(--color-accent)]" />
+            <span className="mt-2 font-sans text-[9px] font-medium tracking-[0.31em] text-[var(--color-fg-dim)] uppercase">
+              Decentralized protocol
             </span>
           </Link>
           <p className="mt-4 max-w-sm font-sans text-sm leading-relaxed text-[var(--color-fg-muted)]">

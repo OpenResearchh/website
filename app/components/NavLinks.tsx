@@ -15,7 +15,7 @@ export function NavLinks({ links }: { links: NavLink[] }) {
   };
 
   return (
-    <nav className="hidden items-center gap-8 justify-self-center sm:flex">
+    <nav className="hidden items-center gap-8 justify-self-center lg:flex">
       {links.map((link) => {
         const active = isActive(link.href);
         return (

@@ -158,6 +158,42 @@
     color: var(--color-brand-ink);
   }
 
+  /* Print / Save-as-PDF: always render the clean light theme so exports don't
+     invert into white-cards-on-black. */
+  @media print {
+    html,
+    html[data-theme="dark"] {
+      color-scheme: light;
+      --ink: 15 15 15;
+      --color-bg: #ffffff;
+      --color-bg-soft: #ffffff;
+      --color-bg-elev: #ffffff;
+      --color-bg-2: #f3f4f8;
+      --color-bg-3: #ffffff;
+      --color-bg-ink: #0f0f0f;
+      --color-glass: #ffffff;
+      --color-fg: #0f0f0f;
+      --color-fg-muted: #43464e;
+      --color-fg-dim: #6b6f78;
+      --color-fg-4: #a1a6b0;
+      --color-line: rgb(15 15 15 / 0.12);
+      --color-line-soft: rgb(15 15 15 / 0.08);
+      --color-line-2: rgb(15 15 15 / 0.16);
+      --color-line-3: rgb(15 15 15 / 0.26);
+      --color-accent: #0b4a8f;
+      --color-cyan: #0090a0;
+      --color-green: #12866f;
+      --color-rose: #c0392b;
+    }
+    html[data-theme="dark"] body,
+    body {
+      background: #ffffff !important;
+    }
+    .hero-grid-bg {
+      display: none;
+    }
+  }
+
   .wallet-adapter-modal {
     z-index: 20000 !important;
   }
@@ -359,6 +395,17 @@
     inset: 0;
     background: radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.6), transparent 40%);
     mix-blend-mode: overlay;
+  }
+
+  /* Full-color prism symbol swaps structural ink for dark surfaces. */
+  .brand-symbol-dark {
+    display: none;
+  }
+  html[data-theme="dark"] .brand-symbol-light {
+    display: none;
+  }
+  html[data-theme="dark"] .brand-symbol-dark {
+    display: block;
   }
 
   /* ----- Domain cards ----- */

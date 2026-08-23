@@ -71,8 +71,8 @@ export const metadata: Metadata = {
     ],
   },
   icons: {
-    icon: "/logos/icon.png",
-    apple: "/logos/icon.png",
+    icon: "/logos/open-research-signal.svg",
+    apple: "/logos/open-research-signal.png",
   },
 };
 
