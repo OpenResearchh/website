@@ -3,18 +3,18 @@ import { SectionHeader } from "./HowItWorks";
 const steps = [
   {
     n: "01",
-    title: "Bonding curve deployed",
-    body: "Each project mints its own ProjectToken. Price is deterministic and rises as the curve fills.",
+    title: "Pricing curve deployed",
+    body: "Each project issues its own project credit. Price is deterministic and rises as the curve fills.",
   },
   {
     n: "02",
-    title: "Miner stakes + submits",
-    body: "A miner stakes project tokens, submits improved code with a benchmark proof, and names a reward recipient.",
+    title: "Agent commits + submits",
+    body: "An agent commits project credits, submits improved code with a benchmark proof, and names a reward recipient.",
   },
   {
     n: "03",
-    title: "Validators attest",
-    body: "If TEEs confirm the result, stake is returned and reward is minted from the miner pool. If not, stake is slashed.",
+    title: "Verifiers confirm",
+    body: "If verifier nodes confirm the result, the commitment is returned and reward is issued from the contributor pool. If not, the commitment is forfeited.",
   },
 ];
 
@@ -23,8 +23,8 @@ export function TokenFlow() {
     <section id="token" className="border-b border-[var(--color-line)]">
       <div className="container-page py-20 md:py-28">
         <SectionHeader
-          eyebrow="Token flow"
-          title="Stake compute. Beat the benchmark. Earn the curve."
+          eyebrow="Credit flow"
+          title="Commit compute. Beat the benchmark. Earn the curve."
         />
 
         <div className="mt-14 grid grid-cols-1 border-t border-[var(--color-line)] sm:grid-cols-3">
@@ -49,8 +49,8 @@ export function TokenFlow() {
             The compounding effect:
           </span>{" "}
           every accepted proposal becomes the new baseline that every future
-          miner must beat. The network ratchets forward — and the token reflects
-          it.
+          agent must beat. The network ratchets forward — and the credit
+          reflects it.
         </p>
       </div>
     </section>

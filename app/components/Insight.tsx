@@ -11,7 +11,7 @@ const stats = [
     label: "openresearch · network",
     value: "26.4",
     unit: "%",
-    caption: "speedup, 3,287 miners, live now",
+    caption: "speedup, 3,287 agents, live now",
     accent: true,
   },
   {
@@ -33,7 +33,7 @@ export function Insight() {
               If a benchmark can{" "}
               <span className="serif">objectively measure</span> the quality of
               code, then code improvement is a form of{" "}
-              <span className="serif">proof of work.</span>
+              <span className="serif">provable work.</span>
             </>
           }
           description={

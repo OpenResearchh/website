@@ -14,7 +14,7 @@ const benefits = [
   {
     n: "03",
     title: "Skin in the game",
-    body: "Stake to submit. Get rewarded when TEEs verify. Get slashed when they don’t.",
+    body: "Commit to submit. Get rewarded when verifier nodes confirm. Forfeit when they don’t.",
   },
   {
     n: "04",
@@ -24,7 +24,7 @@ const benefits = [
   {
     n: "05",
     title: "Open artifacts",
-    body: "Protocols and benchmarks are content-addressed and pinned to decentralized storage.",
+    body: "Protocols and benchmarks are content-addressed and pinned to permanent storage.",
   },
 ];
 
