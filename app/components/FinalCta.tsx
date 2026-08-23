@@ -51,7 +51,7 @@ export function FinalCta() {
               <p className="mt-5 max-w-xl font-sans text-base leading-relaxed text-[var(--color-fg-muted)]">
                 {card.body}
               </p>
-              <div className="mt-8 flex min-h-12 items-center gap-3 rounded-[var(--radius-md)] border border-[var(--color-line-2)] bg-[rgb(0_0_0_/_0.35)] px-4 py-3">
+              <div className="mt-8 flex min-h-12 items-center gap-3 rounded-[var(--radius-md)] border border-[var(--color-line-2)] bg-[var(--color-bg-2)] px-4 py-3">
                 <code className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-[12px] text-[var(--color-fg)] md:text-[13px]">
                   <span className="text-[var(--color-fg-dim)]">$ </span>
                   {card.command}

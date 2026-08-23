@@ -8,7 +8,7 @@ type AddressLinkProps = {
 } & Omit<ComponentPropsWithoutRef<"a">, "href" | "children">;
 
 /**
- * Renders a network participant ID as a public-record link.
+ * Renders an on-chain address as an explorer link.
  */
 export function AddressLink({
   address,
@@ -23,9 +23,9 @@ export function AddressLink({
       href={explorerAddressUrl(address)}
       target="_blank"
       rel="noreferrer noopener"
-      title={title ?? `View ${address} on the public record`}
+      title={title ?? `View ${address} on explorer`}
       className={
-        "relative z-20 cursor-pointer underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline pointer-events-auto" +
+        "relative z-20 cursor-pointer underline-offset-4 hover:text-[var(--color-accent)] hover:underline pointer-events-auto" +
         (className ? ` ${className}` : "")
       }
     >

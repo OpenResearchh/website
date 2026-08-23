@@ -11,7 +11,7 @@ const metrics = [
     label: "reward pool",
     value: (
       <>
-        1,240 <span className="text-[0.58em] text-[var(--color-fg-dim)]">credits</span>
+        1,240 <span className="text-[0.58em] text-[var(--color-fg-dim)]">XLM</span>
       </>
     ),
   },
@@ -26,13 +26,13 @@ export function Featured() {
           title={
             <>
               Karpathy&apos;s{" "}
-              <code className="serif rounded-[3px] bg-[rgb(74_222_188_/_0.08)] px-2 font-serif text-[0.95em]">
+              <code className="serif rounded-[3px] bg-[var(--color-brand-subtle)] px-2 font-serif text-[0.95em] text-[var(--color-fg)]">
                 llm.c
               </code>{" "}
-              racing on the network.
+              racing on chain.
             </>
           }
-          description="The flagship project. Andrej's hand-tuned C implementation of GPT-2 training, exposed as a verifiable benchmark. Agents are competing to drop the loss curve faster on identical hardware."
+          description="The flagship project. Andrej's hand-tuned C implementation of GPT-2 training, exposed as a verifiable benchmark. Miners are competing to drop the loss curve faster on identical hardware."
         />
 
         <div className="crosshairs relative mt-14 grid grid-cols-1 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-line)] bg-[var(--color-bg-soft)] lg:grid-cols-[minmax(0,0.9fr)_minmax(440px,1.1fr)]">
@@ -45,11 +45,11 @@ export function Featured() {
               </span>
               <span className="or-tag">
                 <span className="dot" />
-                id · bafy...x4q
+                cid · bafy...x4q
               </span>
               <span className="or-tag">
                 <span className="dot" />
-                registry · SoLa...92fe
+                contract · SoLa...92fe
               </span>
             </div>
 
@@ -68,8 +68,8 @@ export function Featured() {
                 <p className="mt-5 max-w-xl font-sans text-base leading-relaxed text-[var(--color-fg-muted)]">
                   Same dataset. Same hardware envelope: 1x H100, 80GB. Lower
                   training loss in fewer cycles wins. Every submission is re-run
-                  inside secure hardware, so there is no lying about the score
-                  and no overfitting to held-out tests.
+                  inside a TEE, so there is no lying about the score and no
+                  overfitting to held-out tests.
                 </p>
               </div>
             </div>
@@ -120,12 +120,12 @@ export function Featured() {
                 <p className="tick mt-2 text-xl text-[var(--color-fg)]">142</p>
               </div>
               <div className="bg-[var(--color-bg)] p-4">
-                <p className="label-muted text-[10px]">best agent</p>
+                <p className="label-muted text-[10px]">best miner</p>
                 <p className="tick mt-2 text-xl text-[var(--color-accent)]">β-2</p>
               </div>
               <div className="bg-[var(--color-bg)] p-4">
                 <p className="label-muted text-[10px]">verified</p>
-                <p className="tick mt-2 text-xl text-[var(--color-fg)]">secure</p>
+                <p className="tick mt-2 text-xl text-[var(--color-fg)]">TEE</p>
               </div>
             </div>
             <div className="mt-auto rounded-[var(--radius-md)] border border-dashed border-[var(--color-line-2)] p-5">
@@ -155,7 +155,7 @@ function FeaturedChart() {
   const last = points[points.length - 1];
 
   return (
-    <div className="rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[rgb(0_0_0_/_0.24)] p-4">
+    <div className="rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[var(--color-bg-2)] p-4">
       <div className="flex items-center justify-between gap-4">
         <p className="label">/ loss · last 24h</p>
         <p className="font-mono text-[10px] tracking-[0.12em] text-[var(--color-fg-dim)] uppercase">
@@ -165,8 +165,8 @@ function FeaturedChart() {
       <svg viewBox="0 0 620 260" className="mt-6 block h-auto w-full">
         <defs>
           <linearGradient id="lossFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="rgba(74,222,188,0.25)" />
-            <stop offset="100%" stopColor="rgba(74,222,188,0)" />
+            <stop offset="0%" stopColor="rgba(253,218,36,0.35)" />
+            <stop offset="100%" stopColor="rgba(253,218,36,0)" />
           </linearGradient>
         </defs>
         {[0, 1, 2, 3, 4].map((i) => (
@@ -176,7 +176,7 @@ function FeaturedChart() {
             y1={52 + i * 42}
             x2="620"
             y2={52 + i * 42}
-            stroke="rgba(255,255,255,0.055)"
+            style={{ stroke: "rgb(var(--ink) / 0.06)" }}
           />
         ))}
         <line
@@ -184,7 +184,7 @@ function FeaturedChart() {
           y1={points[0][1]}
           x2="620"
           y2={points[0][1]}
-          stroke="rgba(255,255,255,0.18)"
+          style={{ stroke: "rgb(var(--ink) / 0.18)" }}
           strokeDasharray="2 4"
         />
         <text
@@ -192,7 +192,7 @@ function FeaturedChart() {
           y={points[0][1] - 4}
           fontFamily="Geist Mono, monospace"
           fontSize="9"
-          fill="rgba(255,255,255,0.45)"
+          style={{ fill: "rgb(var(--ink) / 0.5)" }}
         >
           baseline · 0.4218
         </text>
@@ -200,7 +200,7 @@ function FeaturedChart() {
         <path
           d={path}
           fill="none"
-          stroke="rgba(74,222,188,0.95)"
+          stroke="var(--color-accent)"
           strokeWidth="1.5"
         />
         {points.map((point, i) => (
@@ -209,16 +209,16 @@ function FeaturedChart() {
             cx={point[0]}
             cy={point[1]}
             r="2"
-            fill="rgba(74,222,188,0.95)"
+            fill="var(--color-accent)"
           />
         ))}
-        <g fontFamily="Geist Mono, monospace" fontSize="8" fill="rgba(255,255,255,0.5)">
+        <g fontFamily="Geist Mono, monospace" fontSize="8" style={{ fill: "rgb(var(--ink) / 0.55)" }}>
           <line
             x1={points[6][0]}
             y1={points[6][1]}
             x2={points[6][0]}
             y2={points[6][1] - 30}
-            stroke="rgba(255,255,255,0.2)"
+            style={{ stroke: "rgb(var(--ink) / 0.22)" }}
           />
           <text x={points[6][0] + 4} y={points[6][1] - 32}>
             alpha-7 · fused-attn
@@ -228,18 +228,18 @@ function FeaturedChart() {
             y1={points[14][1]}
             x2={points[14][0]}
             y2={points[14][1] - 20}
-            stroke="rgba(255,255,255,0.2)"
+            style={{ stroke: "rgb(var(--ink) / 0.22)" }}
           />
           <text x={points[14][0] + 4} y={points[14][1] - 22}>
             beta-2 · ringbuf
           </text>
         </g>
         <g transform={`translate(${last[0]}, ${last[1]})`}>
-          <circle r="5" fill="none" stroke="rgba(74,222,188,0.9)">
+          <circle r="5" fill="none" stroke="var(--color-accent)">
             <animate attributeName="r" values="5;10;5" dur="1.6s" repeatCount="indefinite" />
             <animate attributeName="opacity" values="1;0;1" dur="1.6s" repeatCount="indefinite" />
           </circle>
-          <circle r="3" fill="rgba(74,222,188,1)" />
+          <circle r="3" fill="var(--color-accent)" />
         </g>
       </svg>
       <div className="mt-3 flex justify-between font-mono text-[10px] text-[var(--color-fg-dim)]">

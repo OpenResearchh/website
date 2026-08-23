@@ -32,7 +32,9 @@ export function BuiltOn() {
           </a>
 
           <a
-            href="/#architecture"
+            href="https://stellar.org"
+            target="_blank"
+            rel="noreferrer noopener"
             className="group flex items-center gap-5 bg-[var(--color-bg-soft)] p-6 transition-colors hover:bg-[var(--color-bg-elev)] md:p-8"
           >
             <span className="flex h-12 w-12 items-center justify-center rounded-full ring-1 ring-[var(--color-line)] md:h-14 md:w-14">
@@ -41,11 +43,11 @@ export function BuiltOn() {
             <div className="min-w-0 flex-1">
               <p className="label">Live on</p>
               <p className="mt-1.5 flex items-center gap-2 font-sans text-base leading-snug text-[var(--color-fg)] md:text-lg">
-                <span>Distributed network + permanent storage</span>
+                <span>Stellar + Irys</span>
               </p>
             </div>
             <span className="hidden font-mono text-xs text-[var(--color-fg-dim)] transition-colors group-hover:text-[var(--color-fg-muted)] sm:inline">
-              registry
+              program
             </span>
           </a>
         </div>

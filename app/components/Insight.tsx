@@ -57,7 +57,7 @@ export function Insight() {
               <p
                 className={`tick mt-6 text-[56px] leading-none font-medium tracking-tight md:text-[72px] ${
                   stat.accent
-                    ? "text-[var(--color-accent)] drop-shadow-[0_0_26px_rgb(74_222_188_/_0.22)]"
+                    ? "highlight text-[var(--color-fg)]"
                     : "text-[var(--color-fg)]"
                 }`}
               >

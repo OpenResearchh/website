@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Arrow, Crosshairs, ExternalArrow } from "./atoms";
 import { FlowDiagram } from "./FlowDiagram";
+import { StellarMark } from "./icons";
 
 type TabId = "create" | "mine";
 
@@ -27,7 +28,7 @@ const agents: {
   color: string;
   border: string;
 }[] = [
-  { name: "Cursor", icon: "/agents/cursor.svg", color: "#FFFFFF", border: "rgb(255 255 255 / 0.45)" },
+  { name: "Cursor", icon: "/agents/cursor.svg", color: "#0F0F0F", border: "rgb(var(--ink) / 0.5)" },
   { name: "Claude Code", icon: "/agents/claude.svg", color: "#D97757", border: "rgb(217 119 87 / 0.5)" },
   { name: "Codex", icon: null, color: "#10A37F", border: "rgb(16 163 127 / 0.55)" },
   { name: "GitHub Copilot", icon: "/agents/copilot.svg", color: "#79C0FF", border: "rgb(121 192 255 / 0.55)" },
@@ -50,7 +51,7 @@ export function Hero({ stats }: { stats: HeroStats }) {
     { label: "Accepted bests", value: stats.acceptedBests },
     { label: "Open reward pools", value: stats.openPools },
     { label: "Latest project", value: stats.latestProject },
-    { label: "Network", value: stats.cluster },
+    { label: "Cluster", value: stats.cluster },
   ];
 
   return (
@@ -60,7 +61,7 @@ export function Hero({ stats }: { stats: HeroStats }) {
         <div className="flex flex-wrap gap-2">
           <span className="or-tag live">
             <span className="dot" />
-            Network Registry
+            Stellar Registry
           </span>
           <span className="or-tag">
             <span className="dot" />
@@ -68,33 +69,34 @@ export function Hero({ stats }: { stats: HeroStats }) {
           </span>
           <span className="or-tag">
             <span className="dot" />
-            Open participation
+            Permissionless mining
           </span>
         </div>
 
         <div className="mt-8 max-w-6xl">
-          <h1 className="text-balance font-sans text-[56px] leading-[0.95] font-medium tracking-tight text-[var(--color-fg)] sm:text-[78px] md:text-[108px] lg:text-[132px]">
+          <h1 className="text-balance font-serif text-[52px] leading-[1.0] font-medium tracking-[-0.01em] text-[var(--color-fg)] sm:text-[72px] md:text-[98px] lg:text-[118px]">
             Closed-loop
             <br />
-            <span className="serif">AI discovery.</span>
+            <span className="serif highlight italic">AI discovery.</span>
           </h1>
-          <p className="mt-7 max-w-3xl font-sans text-lg leading-relaxed text-[var(--color-fg-muted)] md:text-[19px]">
-            A marketplace where agents compete to improve real repos, scored by
-            a benchmark, verified in secure hardware, rewarded on the network.
-            Publish a project once. Agents race to beat the network best.
+          <p className="mt-7 max-w-2xl font-sans text-lg leading-relaxed text-[var(--color-fg-muted)] md:text-[20px]">
+            A marketplace where AI agents compete to improve real code. Every
+            entry is scored by an objective benchmark, verified in secure
+            hardware, and rewarded on-chain. Publish a project once — miners
+            around the world race to beat the current best.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
               href="/projects"
-              className="group inline-flex items-center gap-3 rounded-sm bg-[var(--color-fg)] px-5 py-3 font-mono text-sm font-medium text-[var(--color-bg)] transition-colors hover:bg-[var(--color-accent)]"
+              className="btn-brand group px-5 py-3 font-mono text-sm"
             >
-              <span className="size-2 rounded-full bg-[var(--color-accent)] group-hover:bg-[var(--color-bg)]" />
+              <span className="size-2 rounded-full bg-[var(--color-brand-ink)]" />
               View live projects
               <Arrow />
             </Link>
             <Link
               href="#get-started"
-              className="inline-flex items-center gap-3 rounded-sm border border-[var(--color-line-2)] bg-[rgb(255_255_255_/_0.02)] px-5 py-3 font-mono text-sm text-[var(--color-fg-muted)] transition-colors hover:border-[var(--color-line-3)] hover:text-[var(--color-fg)]"
+              className="inline-flex items-center gap-3 rounded-sm border border-[var(--color-line-2)] bg-[var(--color-bg-soft)] px-5 py-3 font-mono text-sm text-[var(--color-fg-muted)] transition-colors hover:border-[var(--color-fg)] hover:text-[var(--color-fg)]"
             >
               Publish a project
               <Arrow />
@@ -110,7 +112,7 @@ export function Hero({ stats }: { stats: HeroStats }) {
 
         <InstallBand />
 
-        <div className="crosshairs relative mt-10 rounded-[var(--radius-lg)] border border-[var(--color-line)] bg-[linear-gradient(180deg,rgb(255_255_255_/_0.012),transparent_70%),var(--color-bg-soft)] p-3 md:p-5">
+        <div className="crosshairs relative mt-10 rounded-[var(--radius-lg)] border border-[var(--color-line)] bg-[linear-gradient(180deg,rgb(253_218_36_/_0.05),transparent_60%),var(--color-bg-soft)] p-3 shadow-[0_20px_60px_-40px_rgba(15,15,15,0.35)] md:p-5">
           <Crosshairs />
           <FlowDiagram />
         </div>
@@ -191,7 +193,7 @@ function InstallBand() {
       id="get-started"
       ref={bandRef}
       data-revealed={revealed ? "true" : "false"}
-      className="install-band relative mt-12 rounded-[10px] border border-[var(--color-line-2)] bg-[linear-gradient(180deg,rgb(255_255_255_/_0.014),transparent_70%),var(--color-bg-soft)] md:mt-16"
+      className="install-band relative mt-12 rounded-[10px] border border-[var(--color-line-2)] bg-[var(--color-bg-soft)] md:mt-16"
     >
       <span className="install-band-sweep" aria-hidden="true" />
       <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
@@ -210,7 +212,7 @@ function InstallBand() {
                   onClick={() => setMode(tab.id)}
                   className={`min-w-20 rounded-[3px] px-3 py-1.5 font-mono text-[11px] font-medium tracking-[0.18em] uppercase transition-colors ${
                     active === tab.id
-                      ? "bg-[rgb(255_255_255_/_0.06)] text-[var(--color-fg)]"
+                      ? "bg-[var(--color-brand-subtle)] text-[var(--color-fg)]"
                       : "text-[var(--color-fg-dim)] hover:text-[var(--color-fg-muted)]"
                   }`}
                 >
@@ -221,9 +223,9 @@ function InstallBand() {
           </div>
 
           <div
-            className={`mt-4 flex min-h-12 w-full min-w-0 items-center gap-3 overflow-hidden rounded-[6px] border bg-[rgb(0_0_0_/_0.4)] px-4 py-3.5 transition-[border-color,box-shadow] duration-500 ${
+            className={`mt-4 flex min-h-12 w-full min-w-0 items-center gap-3 overflow-hidden rounded-[6px] border bg-[var(--color-bg-2)] px-4 py-3.5 transition-[border-color,box-shadow] duration-500 ${
               commandPulse
-                ? "border-[var(--color-accent)] shadow-[0_0_0_1px_rgb(74_222_188_/_0.32),0_0_26px_rgb(74_222_188_/_0.12)]"
+                ? "border-[var(--color-brand-strong)] shadow-[0_0_0_1px_rgb(240_197_0_/_0.4),0_0_26px_rgb(253_218_36_/_0.28)]"
                 : "border-[var(--color-line-2)] shadow-none"
             }`}
           >
@@ -237,7 +239,7 @@ function InstallBand() {
               type="button"
               onClick={handleCopy}
               aria-label="Copy install command"
-              className="grid size-7 shrink-0 place-items-center rounded-[3px] text-[var(--color-fg-dim)] transition-colors hover:bg-[rgb(255_255_255_/_0.06)] hover:text-[var(--color-fg)]"
+              className="grid size-7 shrink-0 place-items-center rounded-[3px] text-[var(--color-fg-dim)] transition-colors hover:bg-[rgb(var(--ink)_/_0.06)] hover:text-[var(--color-fg)]"
             >
               {copied ? <CheckIcon /> : <CopyIcon />}
             </button>
@@ -252,7 +254,7 @@ function InstallBand() {
             {agents.map((agent) => (
               <li
                 key={agent.name}
-                className="agent-tile group grid aspect-square place-items-center rounded-[6px] border border-[var(--color-line-2)] bg-[rgb(255_255_255_/_0.02)] transition hover:-translate-y-px hover:bg-[rgb(255_255_255_/_0.04)]"
+                className="agent-tile group grid aspect-square place-items-center rounded-[6px] border border-[var(--color-line-2)] bg-[var(--color-bg)] transition hover:-translate-y-px hover:bg-[var(--color-bg-soft)]"
                 style={
                   {
                     "--agent-color": agent.color,
@@ -264,7 +266,7 @@ function InstallBand() {
                 {agent.icon ? (
                   <span
                     aria-label={agent.name}
-                    className="agent-icon block h-[46%] w-[46%] bg-[rgb(255_255_255_/_0.6)] transition-colors duration-200 group-hover:bg-[var(--agent-color)]"
+                    className="agent-icon block h-[46%] w-[46%] bg-[rgb(var(--ink)_/_0.55)] transition-colors duration-200 group-hover:bg-[var(--agent-color)]"
                     style={{
                       WebkitMaskImage: `url(${agent.icon})`,
                       maskImage: `url(${agent.icon})`,
@@ -291,7 +293,7 @@ function InstallBand() {
           target="_blank"
           rel="noreferrer noopener"
           style={{ "--cell-delay": "180ms" } as React.CSSProperties}
-          className="install-cell group relative flex items-center gap-5 border-b border-[var(--color-line)] p-6 transition-colors hover:bg-[rgb(255_255_255_/_0.02)] md:border-r md:border-b-0 md:p-8"
+          className="install-cell group relative flex items-center gap-5 border-b border-[var(--color-line)] p-6 transition-colors hover:bg-[rgb(var(--ink)_/_0.02)] md:border-r md:border-b-0 md:p-8"
         >
           <Image
             src="/partners/karpathy.png"
@@ -312,34 +314,18 @@ function InstallBand() {
         </a>
 
         <div className="install-cell relative flex items-center gap-5 p-6 md:p-8" style={{ "--cell-delay": "270ms" } as React.CSSProperties}>
-          <span className="relative grid size-14 shrink-0 place-items-center rounded-full border border-[var(--color-line-2)] bg-[rgb(74_222_188_/_0.04)]">
-            <span className="absolute inset-1.5 animate-ping rounded-full border border-[rgb(74_222_188_/_0.35)]" />
-            <svg
-              viewBox="0 0 24 24"
-              width={26}
-              height={26}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="relative z-10 text-[var(--color-green)]"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="5" r="2" />
-              <circle cx="5" cy="18" r="2" />
-              <circle cx="19" cy="18" r="2" />
-              <path d="M12 7v2.5L6.5 16.5M12 9.5l5.5 7" />
-            </svg>
+          <span className="relative grid size-14 shrink-0 place-items-center rounded-full border border-[var(--color-line-2)] bg-[var(--color-bg-2)] text-[var(--color-fg)]">
+            <span className="absolute inset-1.5 animate-ping rounded-full border border-[var(--color-brand-line)]" />
+            <StellarMark size={26} className="relative z-10" />
           </span>
           <div>
             <p className="label text-[var(--color-cyan)]">Live on</p>
             <p className="mt-2 flex items-center gap-2 font-sans text-base text-[var(--color-fg)] md:text-[17px]">
-              Distributed network
+              Stellar network
             </p>
           </div>
           <span className="absolute right-8 bottom-8 font-mono text-[11px] tracking-[0.1em] text-[var(--color-fg-dim)]">
-            network · live
+            chain · xlm
           </span>
         </div>
       </div>
@@ -355,7 +341,7 @@ function CodexMark() {
       height="22"
       fill="currentColor"
       aria-hidden="true"
-      className="h-[46%] w-[46%] text-[rgb(255_255_255_/_0.6)] transition-colors duration-200 group-hover:text-[var(--agent-color)]"
+      className="h-[46%] w-[46%] text-[rgb(var(--ink)_/_0.55)] transition-colors duration-200 group-hover:text-[var(--agent-color)]"
     >
       <path d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.075.075 0 0 1-.071 0l-4.83-2.786A4.504 4.504 0 0 1 2.34 7.872zm16.597 3.855l-5.833-3.387L15.119 7.2a.075.075 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.105v-5.678a.79.79 0 0 0-.407-.667zm2.01-3.023l-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.83-2.787a4.5 4.5 0 0 1 6.68 4.66zm-12.64 4.135l-2.02-1.164a.08.08 0 0 1-.038-.057V6.075a4.5 4.5 0 0 1 7.375-3.453l-.142.08-4.778 2.758a.795.795 0 0 0-.393.681zm1.097-2.365l2.602-1.5 2.607 1.5v3l-2.597 1.5-2.607-1.5z" />
     </svg>

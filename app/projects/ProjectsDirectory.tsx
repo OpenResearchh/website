@@ -278,7 +278,7 @@ function ProjectsToolbar({
               onClick={() => setFilter(item.id)}
               className={`rounded-full border px-3.5 py-1.5 font-mono text-[11px] tracking-[0.04em] transition-colors ${
                 active
-                  ? "border-[rgb(74_222_188_/_0.45)] bg-[rgb(74_222_188_/_0.08)] text-[var(--color-accent)]"
+                  ? "border-[var(--color-brand-line)] bg-[var(--color-brand-subtle)] text-[var(--color-fg)]"
                   : "border-[var(--color-line-2)] text-[var(--color-fg-muted)] hover:border-[var(--color-line-3)] hover:text-[var(--color-fg)]"
               }`}
             >
@@ -335,7 +335,7 @@ function ProjectRow({
   return (
     <tr
       className={`project-row group border-b border-[var(--color-line)] last:border-b-0 ${
-        zebra ? "bg-[rgb(255_255_255_/_0.012)]" : ""
+        zebra ? "bg-[rgb(var(--ink)_/_0.02)]" : ""
       }`}
     >
       <td className="relative px-4 py-5">
@@ -404,9 +404,9 @@ function ProjectRow({
       <td className="px-4 py-5">
         <div className="font-mono text-[13px] text-[var(--color-fg)]">
           {formatSol(currentPrice(project))}{" "}
-          <span className="text-[var(--color-fg-dim)]">SOL</span>
+          <span className="text-[var(--color-fg-dim)]">XLM</span>
         </div>
-        <div className="mt-2 h-1.5 w-24 rounded-full bg-[rgb(255_255_255_/_0.08)]">
+        <div className="mt-2 h-1.5 w-24 rounded-full bg-[rgb(var(--ink)_/_0.09)]">
           <div
             className="h-full rounded-full bg-[var(--color-accent)] transition-[width] duration-500"
             style={{ width: `${Math.max(4, Math.min(100, poolPercent))}%` }}
@@ -417,10 +417,10 @@ function ProjectRow({
         <span
           className={`inline-flex rounded-full border px-2.5 py-1 font-mono text-[10px] tracking-[0.08em] uppercase ${
             status === "winning"
-              ? "border-[rgb(74_222_188_/_0.45)] bg-[rgb(74_222_188_/_0.08)] text-[var(--color-accent)]"
+              ? "border-[var(--color-brand-line)] bg-[var(--color-brand-subtle)] text-[var(--color-fg)]"
               : status === "iterating"
-                ? "border-[rgb(96_165_250_/_0.42)] bg-[rgb(96_165_250_/_0.08)] text-[var(--color-cyan)]"
-                : "border-[var(--color-line-2)] bg-[rgb(255_255_255_/_0.03)] text-[var(--color-fg-muted)]"
+                ? "border-[rgb(0_167_181_/_0.45)] bg-[rgb(0_167_181_/_0.1)] text-[var(--color-cyan)]"
+                : "border-[var(--color-line-2)] bg-[var(--color-bg-soft)] text-[var(--color-fg-muted)]"
           }`}
         >
           {status}
@@ -465,7 +465,7 @@ function Sparkline({
       <path
         d={`M ${points.map((point) => point.join(",")).join(" L ")}`}
         fill="none"
-        stroke="rgba(74,222,188,0.85)"
+        stroke="var(--color-accent)"
         strokeWidth="1.4"
       />
       <circle
@@ -521,7 +521,7 @@ function RegistrySnapshot({
             <Link
               key={item.id}
               href={`/projects/${item.projectId}`}
-              className="grid gap-2 border-b border-[var(--color-line)] px-4 py-4 transition-colors last:border-b-0 hover:bg-[rgb(255_255_255_/_0.018)] md:grid-cols-[112px_1fr_112px_128px] md:items-center"
+              className="grid gap-2 border-b border-[var(--color-line)] px-4 py-4 transition-colors last:border-b-0 hover:bg-[rgb(var(--ink)_/_0.02)] md:grid-cols-[112px_1fr_112px_128px] md:items-center"
             >
               <span className="font-mono text-[11px] text-[var(--color-fg-muted)]">
                 {formatDate(new Date(item.date))}
@@ -667,7 +667,7 @@ function TopMiners({ projects }: { projects: ProjectListItem[] }) {
           miners.map((row, i) => (
             <div
               key={row.miner}
-              className="grid grid-cols-[42px_1fr_auto] items-center gap-3 border-b border-[var(--color-line)] px-4 py-4 transition-colors last:border-b-0 hover:bg-[rgb(255_255_255_/_0.018)]"
+              className="grid grid-cols-[42px_1fr_auto] items-center gap-3 border-b border-[var(--color-line)] px-4 py-4 transition-colors last:border-b-0 hover:bg-[rgb(var(--ink)_/_0.02)]"
             >
               <span className="tick text-[15px] font-medium text-[var(--color-accent)]">
                 {String(i + 1).padStart(2, "0")}

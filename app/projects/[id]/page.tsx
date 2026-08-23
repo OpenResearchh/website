@@ -32,20 +32,26 @@ import {
 } from "@/lib/openResearch/read";
 import { renderProtocolMarkdown } from "@/lib/openResearch/protocolMarkdown";
 import { priceAtSupply } from "@/lib/openResearch/trade";
+import { USE_STELLAR_DATA } from "@/lib/stellar/config";
+import {
+  getStellarOpenProposals,
+  getStellarProject,
+} from "@/lib/stellar/read";
 import { AddressLink } from "../../components/AddressLink";
 import { CopyTextButton } from "../../components/CopyTextButton";
 import { ProjectHeaderActions } from "../../components/ProjectHeaderActions";
 import { Footer } from "../../components/Footer";
 import { Markdown } from "../../components/Markdown";
 import { Nav } from "../../components/Nav";
+import { StellarProjectDetailView } from "./StellarProjectDetailView";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 30;
 
 /** Legacy header blurb when protocol.json has no `meta.purposeStatement` (older publishes). */
-const FALLBACK_PURPOSE_TITLE = "Immutable benchmark project on the distributed network.";
+const FALLBACK_PURPOSE_TITLE = "Immutable benchmark project on-chain.";
 const FALLBACK_PURPOSE_BODY =
-  "Artifacts are fetched from permanent storage by their network storage IDs and pinned alongside content fingerprints. Beat the network best to earn credits from the contributor pool.";
+  "Artifacts are fetched from Irys by their on-chain Irys IDs and pinned alongside SHA-256 hashes. Beat the network best to earn tokens from the miner pool.";
 
 type RouteProps = { params: Promise<{ id: string }> };
 
@@ -56,19 +62,62 @@ export async function generateMetadata({
   const projectId = Number.parseInt(id, 10);
   if (Number.isNaN(projectId)) return { title: "Project · Not found" };
 
+  if (USE_STELLAR_DATA) {
+    const project = await getStellarProject(projectId).catch(() => null);
+    if (!project) return { title: `Project #${id}` };
+    return {
+      title: `Project #${project.id} · Registry`,
+      description: `On-chain protocol, benchmark, and current best score for project #${project.id} on the OpenResearch contract.`,
+    };
+  }
+
   const project = await fetchProject(null, projectId).catch(() => null);
   if (!project) return { title: `Project #${id}` };
 
   return {
     title: `${project.tokenName} (${project.tokenSymbol}) · Project #${project.id}`,
-    description: `Network protocol, benchmark, and current best score for ${project.tokenName} on the OpenResearch registry.`,
+    description: `On-chain protocol, benchmark, and current best score for ${project.tokenName} on the OpenResearch registry.`,
   };
+}
+
+async function StellarProjectPage({ projectId }: { projectId: number }) {
+  let project: Awaited<ReturnType<typeof getStellarProject>> = null;
+  let registryError: string | null = null;
+  try {
+    project = await getStellarProject(projectId);
+  } catch (e) {
+    registryError = e instanceof Error ? e.message : "Failed to read the contract";
+  }
+
+  if (!project) {
+    if (registryError) {
+      return <ErrorPage projectId={projectId} message={registryError} />;
+    }
+    notFound();
+  }
+
+  const proposals = await getStellarOpenProposals(projectId).catch(() => []);
+
+  return (
+    <>
+      <Nav />
+      <main>
+        <StellarProjectDetailView project={project} proposals={proposals} />
+      </main>
+      <Footer />
+    </>
+  );
 }
 
 export default async function ProjectViewerPage({ params }: RouteProps) {
   const { id } = await params;
   const projectId = Number.parseInt(id, 10);
   if (!Number.isFinite(projectId) || projectId < 0) notFound();
+
+  if (USE_STELLAR_DATA) {
+    return <StellarProjectPage projectId={projectId} />;
+  }
+
   if (isProjectHiddenInUi(projectId)) notFound();
 
   let project: ProjectView | null = null;
@@ -77,7 +126,7 @@ export default async function ProjectViewerPage({ params }: RouteProps) {
     project = await fetchProject(null, projectId);
   } catch (e) {
     registryError =
-      e instanceof Error ? e.message : "Failed to read OpenResearch registry";
+      e instanceof Error ? e.message : "Failed to read OpenResearch program";
   }
 
   if (!project) {
@@ -95,7 +144,7 @@ export default async function ProjectViewerPage({ params }: RouteProps) {
     }).catch(
       (e): FetchedArtifact => ({
         kind: "error",
-        message: e instanceof Error ? e.message : "Storage gateway unreachable",
+        message: e instanceof Error ? e.message : "Irys gateway unreachable",
       }),
     ),
     listProposals(null)
@@ -135,7 +184,7 @@ function Breadcrumbs({ id, symbol }: { id: string; symbol: string }) {
         <nav className="font-mono text-xs text-[var(--color-fg-dim)]">
           <Link
             href="/projects"
-            className="underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline"
+            className="underline-offset-4 hover:text-[var(--color-accent)] hover:underline"
           >
             Back to all projects
           </Link>
@@ -250,13 +299,13 @@ function ProjectHeader({
           />
           <Stat
             label="Next price"
-            value={`${formatSol(currentPrice)} SOL`}
+            value={`${formatSol(currentPrice)} XLM`}
             sub={`supply ${formatTokenAmount(totalSupply, decimals)} ${project.tokenSymbol}`}
           />
           <Stat
-            label="Contributor pool"
+            label="Miner pool"
             value={`${formatTokenAmount(project.minerPoolMinted, decimals)} / ${formatTokenAmount(project.minerPoolCap, decimals)}`}
-            sub={`issued / cap · ${project.tokenSymbol}`}
+            sub={`minted / cap · ${project.tokenSymbol}`}
           />
         </dl>
       </div>
@@ -347,7 +396,7 @@ function ProjectBody({
   );
 }
 
-/** `protocol.json` from permanent storage (artifact) — same shape as the network-pinned protocol. */
+/** `protocol.json` from Irys (artifact) — same shape as on-chain pinned protocol. */
 function metaPurposeStatementFromArtifact(artifact: FetchedArtifact): string | null {
   if (artifact.kind !== "json" || !artifact.data || typeof artifact.data !== "object") {
     return null;
@@ -385,7 +434,7 @@ function ProtocolPanel({
           </h2>
         </div>
         <p className="font-mono text-xs text-[var(--color-fg-dim)]">
-          Storage ·{" "}
+          Irys ·{" "}
           {!url && hash === ZERO_HASH_HEX ? (
             <span>not published</span>
           ) : url ? (
@@ -394,7 +443,7 @@ function ProtocolPanel({
               target="_blank"
               rel="noreferrer noopener"
               title={irysId ? `${irysId} · ${hash}` : hash}
-              className="underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline"
+              className="underline-offset-4 hover:text-[var(--color-accent)] hover:underline"
             >
               {irysId ? shortAddress(irysId) : shortHash(hash, 10, 6)} ↗
             </a>
@@ -423,14 +472,14 @@ function ArtifactRender({
       return (
         <Notice
           title="No protocol artifact yet"
-          body="This project has no retrievable stored artifact recorded on the network yet."
+          body="This project has no retrievable Irys artifact recorded on-chain yet."
         />
       );
     case "error":
       return (
         <Notice
           tone="error"
-          title="Could not load from storage"
+          title="Could not load from Irys"
           body={artifact.message}
           footer={
             hash !== ZERO_HASH_HEX && "url" in artifact && artifact.url ? (
@@ -438,7 +487,7 @@ function ArtifactRender({
                 href={artifact.url}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline"
+                className="font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-accent)] hover:underline"
               >
                 Try the gateway directly →
               </a>
@@ -458,9 +507,9 @@ function ArtifactRender({
               href={artifact.url}
               target="_blank"
               rel="noreferrer noopener"
-              className="font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline"
+              className="font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-accent)] hover:underline"
             >
-              Open in storage gateway →
+              Open in Irys gateway →
             </a>
           }
         />
@@ -565,7 +614,7 @@ function BenchmarkTrackRecord({
         <div>
           <p className="label">Benchmark track record</p>
           <h2 className="mt-1 font-mono text-2xl font-semibold text-[var(--color-fg)]">
-            Agent improvements
+            Mining improvements
           </h2>
         </div>
         <span className="or-tag">
@@ -621,21 +670,21 @@ function ScorePath({
             x2={width}
             y1={24 + i * 42}
             y2={24 + i * 42}
-            stroke="rgba(255,255,255,0.06)"
+            style={{ stroke: "rgb(var(--ink) / 0.06)" }}
           />
         ))}
         <path
           d={path}
           fill="none"
-          stroke="rgba(74,222,188,0.88)"
+          stroke="var(--color-accent)"
           strokeWidth="2"
         />
         {coords.map((point, i) => (
           <g key={`${point.label}-${i}`} transform={`translate(${point.x}, ${point.y})`}>
             <circle
               r={i === coords.length - 1 ? 5 : 3.5}
-              fill={i === coords.length - 1 ? "rgba(74,222,188,1)" : "var(--color-bg)"}
-              stroke="rgba(74,222,188,0.9)"
+              fill={i === coords.length - 1 ? "var(--color-accent)" : "var(--color-bg-soft)"}
+              stroke="var(--color-accent)"
               strokeWidth="1.6"
             />
           </g>
@@ -694,18 +743,18 @@ function ContributionGrid({ proposals }: { proposals: ProposalView[] }) {
             title={`${formatDate(day.date)} · ${day.count} proposal${day.count === 1 ? "" : "s"}`}
             className={`aspect-square rounded-[2px] border border-[var(--color-line)] ${
               day.count === 0
-                ? "bg-[rgb(255_255_255_/_0.025)]"
+                ? "bg-[var(--color-bg-2)]"
                 : day.count === 1
-                  ? "bg-[rgb(74_222_188_/_0.22)]"
+                  ? "bg-[rgb(253_218_36_/_0.4)]"
                   : day.count < 4
-                    ? "bg-[rgb(74_222_188_/_0.42)]"
-                    : "bg-[var(--color-accent)]"
+                    ? "bg-[rgb(253_218_36_/_0.75)]"
+                    : "bg-[var(--color-brand)]"
             }`}
           />
         ))}
       </div>
       <p className="mt-4 font-sans text-xs leading-relaxed text-[var(--color-fg-muted)]">
-        Last 35 days of proposal submissions from network proposal records.
+        Last 35 days of proposal submissions from on-chain proposal accounts.
       </p>
     </div>
   );
@@ -776,12 +825,12 @@ function OnChainCard({
       <PeopleList project={project} proposals={proposals} />
       <div className="border border-[var(--color-line)] bg-[var(--color-bg-soft)]">
         <div className="border-b border-[var(--color-line)] px-5 py-4">
-          <p className="label">Network</p>
+          <p className="label">On-chain</p>
           <p className="mt-1 font-mono text-base text-[var(--color-fg)]">
-            Distributed network
+            Stellar
           </p>
           <p className="mt-1 font-mono text-xs text-[var(--color-fg-dim)]">
-            registry{" "}
+            program{" "}
             <AddressLink
               address={OPEN_RESEARCH_PROGRAM_ID.toBase58()}
               className="text-[var(--color-fg-muted)]"
@@ -817,9 +866,9 @@ function OnChainCard({
           </CardRow>
         </CardSection>
 
-        <CardSection title="Credit">
+        <CardSection title="Token">
           <CardRow
-            label="Credit ID"
+            label="Mint"
             ddClassName="flex min-w-0 flex-wrap items-center justify-end gap-2 text-right font-mono text-xs text-[var(--color-fg-muted)]"
           >
             <span className="min-w-0 truncate">
@@ -827,7 +876,7 @@ function OnChainCard({
             </span>
             <CopyTextButton
               text={project.mint.toBase58()}
-              label="Copy project credit ID"
+              label="Copy project token mint"
             />
           </CardRow>
           <CardRow label="Name">
@@ -855,10 +904,10 @@ function OnChainCard({
           </CardRow>
           <CardRow label="Next price">
             <span className="font-mono text-sm text-[var(--color-fg)]">
-              {formatSol(currentPrice)} SOL
+              {formatSol(currentPrice)} XLM
             </span>
           </CardRow>
-          <CardRow label="Contributor pool">
+          <CardRow label="Miner pool">
             <span className="font-mono text-sm text-[var(--color-fg)]">
               {formatTokenAmount(project.minerPoolMinted, decimals)} /{" "}
               {formatTokenAmount(project.minerPoolCap, decimals)}
@@ -870,7 +919,7 @@ function OnChainCard({
           <CardRow label="Creator">
             <AddressLink address={project.creator.toBase58()} />
           </CardRow>
-          <CardRow label="Best agent">
+          <CardRow label="Best miner">
             {isBaseline ? (
               <span className="font-mono text-sm text-[var(--color-fg-dim)]">
                 - none yet
@@ -886,7 +935,7 @@ function OnChainCard({
           </CardRow>
         </CardSection>
 
-        <CardSection title="Stored artifacts">
+        <CardSection title="Irys artifacts">
           <HashRow
             label="Protocol"
             hash={project.protocolHash}
@@ -923,8 +972,8 @@ function OnChainCard({
       </div>
 
       <p className="mt-3 font-mono text-[11px] leading-relaxed text-[var(--color-fg-dim)]">
-        The registry stores 32-byte storage IDs for retrieval and 32-byte
-        content fingerprints for integrity checks.
+        The program stores 32-byte Irys IDs for retrieval and 32-byte SHA-256
+        hashes for integrity checks.
       </p>
     </aside>
   );
@@ -950,18 +999,18 @@ function PeopleList({
       <div className="border-b border-[var(--color-line)] px-5 py-4">
         <p className="label">People</p>
         <p className="mt-1 font-sans text-sm text-[var(--color-fg-muted)]">
-          Creator and agents seen in proposal records.
+          Creator and miners seen in proposal accounts.
         </p>
       </div>
       <div className="divide-y divide-[var(--color-line)]">
         <PersonRow label="Creator" address={project.creator.toBase58()} />
         {miners.length === 0 ? (
           <div className="px-5 py-4 font-sans text-sm text-[var(--color-fg-muted)]">
-            No agents have submitted proposals yet.
+            No miners have submitted proposals yet.
           </div>
         ) : (
           miners.map((miner, i) => (
-            <PersonRow key={miner} label={`Agent ${i + 1}`} address={miner} />
+            <PersonRow key={miner} label={`Miner ${i + 1}`} address={miner} />
           ))
         )}
       </div>
@@ -994,16 +1043,16 @@ function MineQuickstart({
 }) {
   const install =
     "npx skills add OpenResearchh/skill --skill autoresearch-mine";
-  const run = `Start autoresearch-mine for ${mint}`;
+  const run = `Start autoresearch mining for ${mint}`;
 
   return (
     <details className="group mb-6 border border-[var(--color-line)] bg-[var(--color-bg-soft)]" open>
       <summary className="flex cursor-pointer list-none items-start justify-between gap-4 border-b border-[var(--color-line)] px-5 py-4 marker:content-none [&::-webkit-details-marker]:hidden">
         <div>
-          <p className="label">Run in 60 seconds</p>
+          <p className="label">Mine in 60 seconds</p>
         <p className="mt-1 font-sans text-sm leading-snug text-[var(--color-fg-muted)]">
-          Install the skill, then start the agent for {tokenSymbol}. Submit only
-          if you beat the best.
+          Install the skill, then start mining for {tokenSymbol}. Submit only if
+          you beat the best.
         </p>
         </div>
         <span className="mt-1 font-mono text-lg text-[var(--color-fg-dim)] transition-transform group-open:rotate-45">
@@ -1016,13 +1065,13 @@ function MineQuickstart({
           n="01"
           label="Install"
           command={install}
-          copyLabel="Copy agent skill install command"
+          copyLabel="Copy mining skill install command"
         />
         <CommandRow
           n="02"
           label="Run"
           command={run}
-          copyLabel={`Copy agent start prompt for ${tokenSymbol}`}
+          copyLabel={`Copy mining start prompt for ${tokenSymbol}`}
         />
       </div>
     </details>
@@ -1123,7 +1172,7 @@ function HashRow({
           target="_blank"
           rel="noreferrer noopener"
           title={`${irysId} · ${hash}`}
-          className="font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline"
+          className="font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-accent)] hover:underline"
         >
           {shortAddress(irysId)} ↗
         </a>
@@ -1149,7 +1198,7 @@ function ErrorPage({
         <section>
           <div className="container-page py-24">
             <div className="border border-[var(--color-line)] bg-[var(--color-bg-soft)] px-8 py-12">
-              <p className="label">Registry unavailable</p>
+              <p className="label">Program unavailable</p>
               <p className="mt-3 font-sans text-base text-[var(--color-fg)]">
                 Could not read project #{projectId} from OpenResearch.
               </p>
@@ -1160,9 +1209,9 @@ function ErrorPage({
                 href={explorerAddressUrl(OPEN_RESEARCH_PROGRAM_ID)}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="mt-6 inline-block font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-brand-bright)] hover:underline"
+                className="mt-6 inline-block font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-accent)] hover:underline"
               >
-                Open public record →
+                Open explorer →
               </a>
             </div>
           </div>

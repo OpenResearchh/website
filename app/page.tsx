@@ -2,6 +2,8 @@ import { SOLANA_CLUSTER } from "@/lib/openResearch/client";
 import { HIDDEN_PROJECT_IDS } from "@/lib/openResearch/projectUi";
 import { listProjects } from "@/lib/openResearch/read";
 import { SYSTEM_PROGRAM } from "@/lib/openResearch/format";
+import { STELLAR_NETWORK, USE_STELLAR_DATA } from "@/lib/stellar/config";
+import { listStellarProjects } from "@/lib/stellar/read";
 import { Domains } from "./components/Domains";
 import { FAQ } from "./components/FAQ";
 import { Featured } from "./components/Featured";
@@ -35,6 +37,9 @@ export default async function HomePage() {
 }
 
 async function loadHeroStats() {
+  if (USE_STELLAR_DATA) {
+    return loadStellarHeroStats();
+  }
   try {
     const projects = (await listProjects()).filter(
       (project) => !HIDDEN_PROJECT_IDS.has(project.id),
@@ -62,6 +67,38 @@ async function loadHeroStats() {
       acceptedBests: "-",
       openPools: "-",
       cluster: SOLANA_CLUSTER,
+      latestProject: "-",
+    };
+  }
+}
+
+async function loadStellarHeroStats() {
+  try {
+    const projects = await listStellarProjects();
+    const acceptedBests = projects.filter(
+      (p) => BigInt(p.currentBestScore) > BigInt(p.baselineScore),
+    ).length;
+    const openPools = projects.filter(
+      (p) => !p.frozen && BigInt(p.rewardPoolBalance) > 0n,
+    ).length;
+    const latest = projects.reduce<string>(
+      (max, p) => (Number(p.id) > Number(max || "0") ? p.id : max),
+      "",
+    );
+
+    return {
+      projectCount: projects.length.toLocaleString(),
+      acceptedBests: acceptedBests.toLocaleString(),
+      openPools: openPools.toLocaleString(),
+      cluster: STELLAR_NETWORK,
+      latestProject: latest ? `#${latest}` : "-",
+    };
+  } catch {
+    return {
+      projectCount: "-",
+      acceptedBests: "-",
+      openPools: "-",
+      cluster: STELLAR_NETWORK,
       latestProject: "-",
     };
   }

@@ -18,6 +18,8 @@ import {
   type ProjectView,
   type ProposalView,
 } from "@/lib/openResearch/read";
+import { USE_STELLAR_DATA } from "@/lib/stellar/config";
+import { listStellarProjects } from "@/lib/stellar/read";
 import { AddressLink } from "../components/AddressLink";
 import { Arrow } from "../components/atoms";
 import { Footer } from "../components/Footer";
@@ -27,6 +29,7 @@ import {
   type ProjectListItem,
   type RegistryEvent,
 } from "./ProjectsDirectory";
+import { StellarProjectsView } from "./StellarProjectsView";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 30;
@@ -34,10 +37,43 @@ export const revalidate = 30;
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "All OpenResearch projects published on the distributed network registry, with current best scores, baselines, and project credit prices.",
+    "All OpenResearch projects published to the on-chain registry, with current best scores, baselines, and project token prices.",
 };
 
 export default async function ProjectsPage() {
+  if (USE_STELLAR_DATA) {
+    return <StellarProjectsPage />;
+  }
+  return <SolanaProjectsPage />;
+}
+
+async function StellarProjectsPage() {
+  let projects: Awaited<ReturnType<typeof listStellarProjects>> = [];
+  let error: string | null = null;
+  try {
+    projects = await listStellarProjects();
+  } catch (e) {
+    error = e instanceof Error ? e.message : "Failed to read the contract";
+  }
+
+  return (
+    <>
+      <Nav />
+      <main>
+        {error ? (
+          <ErrorState message={error} />
+        ) : projects.length === 0 ? (
+          <EmptyState />
+        ) : (
+          <StellarProjectsView projects={projects} />
+        )}
+      </main>
+      <Footer />
+    </>
+  );
+}
+
+async function SolanaProjectsPage() {
   let projects: ProjectListItem[] = [];
   let events: RegistryEvent[] = [];
   let error: string | null = null;
@@ -57,7 +93,7 @@ export default async function ProjectsPage() {
     );
     events = buildRegistryEvents(rows, allProposals, metricsByProjectId);
   } catch (e) {
-    error = e instanceof Error ? e.message : "Failed to read OpenResearch registry";
+    error = e instanceof Error ? e.message : "Failed to read OpenResearch program";
   }
 
   return (
@@ -133,7 +169,7 @@ function buildRegistryEvents(
     let message: string;
     switch (proposal.status) {
       case "approved":
-        message = `Agent advanced ${tokenName} to ${scoreText}`;
+        message = `Miner advanced ${tokenName} to ${scoreText}`;
         break;
       case "rejected":
         message = `Proposal #${proposal.id} on ${tokenName} rejected`;
@@ -146,7 +182,7 @@ function buildRegistryEvents(
         break;
       case "pending":
       default:
-        message = `Agent submitted proposal #${proposal.id} on ${tokenName} at ${scoreText}`;
+        message = `Miner submitted proposal #${proposal.id} on ${tokenName} at ${scoreText}`;
         break;
     }
 
@@ -184,7 +220,7 @@ function NetworkSummary({
             <p className="label">/ network · live</p>
             <h2 className="mt-5 text-balance font-sans text-[40px] leading-[1] font-medium tracking-tight text-[var(--color-fg)] md:text-[56px]">
               Live projects,{" "}
-              <span className="serif">live agents.</span>
+              <span className="serif">live miners.</span>
             </h2>
             <p className="mt-5 max-w-2xl font-sans text-base leading-relaxed text-[var(--color-fg-muted)]">
               {error ? (
@@ -192,7 +228,7 @@ function NetworkSummary({
               ) : (
                 <>
                   Every active benchmark on the {SOLANA_CLUSTER} registry, with
-                  live score, credit, and pricing-curve state. Registry:{" "}
+                  live score, token, and bonding-curve state. Program:{" "}
                   <AddressLink address={OPEN_RESEARCH_PROGRAM_ID.toBase58()} />
                 </>
               )}
@@ -241,9 +277,9 @@ function NetStats({ projects }: { projects: ProjectListItem[] }) {
     { label: "Registry projects", value: projects.length.toLocaleString() },
     { label: "Accepted bests", value: acceptedBests.toLocaleString(), up: acceptedBests > 0 },
     { label: "Open reward pools", value: openPools.toLocaleString() },
-    { label: "Issued credits", value: mintedProjects.toLocaleString() },
+    { label: "Minted tokens", value: mintedProjects.toLocaleString() },
     { label: "Latest project", value: latest ? latest.tokenSymbol : "-" },
-    { label: "Network", value: SOLANA_CLUSTER },
+    { label: "Cluster", value: SOLANA_CLUSTER },
   ];
 
   return (
@@ -251,7 +287,7 @@ function NetStats({ projects }: { projects: ProjectListItem[] }) {
       {stats.map((stat, i) => (
         <div
           key={stat.label}
-          className={`net-stat group relative min-h-[112px] border-[var(--color-line)] px-5 py-5 transition-colors hover:bg-[rgb(255_255_255_/_0.02)] ${
+          className={`net-stat group relative min-h-[112px] border-[var(--color-line)] px-5 py-5 transition-colors hover:bg-[rgb(var(--ink)_/_0.02)] ${
             i % 2 === 0 ? "border-r" : ""
           } ${i < 4 ? "border-b xl:border-b-0" : ""} md:border-r md:[&:nth-child(3n)]:border-r-0 xl:[&:nth-child(3n)]:border-r xl:last:border-r-0`}
         >
@@ -310,7 +346,7 @@ function ErrorState({ message }: { message: string }) {
             {message}
           </p>
           <p className="mt-6 font-sans text-sm text-[var(--color-fg-muted)]">
-            Refresh in a moment, or view the public record directly:
+            Refresh in a moment, or try the explorer directly:
           </p>
           <a
             href={explorerAddressUrl(OPEN_RESEARCH_PROGRAM_ID)}
@@ -318,7 +354,7 @@ function ErrorState({ message }: { message: string }) {
             rel="noreferrer noopener"
             className="mt-2 inline-block font-mono text-xs text-[var(--color-fg-muted)] underline-offset-4 hover:text-[var(--color-fg)] hover:underline"
           >
-            view public record →
+            View on explorer →
           </a>
         </div>
       </div>

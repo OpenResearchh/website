@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 320" role="img" aria-labelledby="title desc">
+  <title id="title">Open Research symbol, reversed</title>
+  <desc id="desc">Five colored research rays converge through a white prism and continue toward a gold diamond.</desc>
+  <g fill="none" stroke-width="4" stroke-linecap="butt">
+    <path d="M26 274 478 156" stroke="#805CAD"/>
+    <path d="M26 283 478 156" stroke="#0E5AAA"/>
+    <path d="M26 292 478 156" stroke="#079B76"/>
+    <path d="M26 300 478 156" stroke="#F3C431"/>
+    <path d="M26 309 478 156" stroke="#D52E12"/>
+  </g>
+  <g fill="none" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M396 12 547 275 246 275Z"/>
+    <path d="M478 156H723"/>
+  </g>
+  <path d="m747 136 20 20-20 20-20-20Z" fill="#FBCA04"/>
+</svg>

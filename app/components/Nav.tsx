@@ -1,63 +1,77 @@
-import Image from "next/image";
 import Link from "next/link";
+import { BrandName, BrandSymbol } from "./BrandIdentity";
+import { NavLinks } from "./NavLinks";
+import { ThemeToggle } from "./ThemeToggle";
+import { GitHubMark, XMark } from "./icons";
+
+const TWITTER_URL = "https://x.com/OpenResearchh";
+const GITHUB_URL = "https://github.com/OpenResearchh";
 
 const links = [
   { href: "/", label: "Overview" },
   { href: "/projects", label: "Projects" },
   { href: "/#how", label: "Protocol" },
-  { href: "/#faq", label: "Docs" },
-  {
-    href: "https://github.com/OpenResearchh",
-    label: "GitHub ↗",
-    external: true,
-  },
+  { href: "/docs", label: "Docs" },
 ];
 
 export function Nav() {
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--color-line)] bg-[rgba(7,9,12,0.72)] backdrop-blur-[14px]">
-      <div className="container-page flex h-16 items-center justify-between">
+    <header className="sticky top-0 z-50 border-b border-[var(--color-line)] bg-[var(--color-glass)] backdrop-blur-[14px]">
+      <div className="container-page grid h-16 grid-cols-[1fr_auto] items-center gap-4 lg:grid-cols-[1fr_auto_1fr]">
         <Link
           href="/"
-          className="group flex items-center gap-2.5 font-mono text-[14px] font-medium tracking-tight"
+          aria-label="Open Research home"
+          className="group flex items-center gap-2.5 justify-self-start"
         >
-          <Image
-            src="/logos/icon.jpeg"
-            alt="OpenResearch"
-            width={30}
-            height={30}
-            className="h-[30px] w-[30px] rounded-full ring-1 ring-[var(--color-line-2)]"
-            priority
-          />
-          <span className="text-[var(--color-fg-dim)]">/</span>
-          <span className="text-[var(--color-fg)] transition-colors group-hover:text-[var(--color-accent)]">
-            OpenResearch
-          </span>
+          <BrandSymbol className="w-[54px] sm:w-[62px]" priority sizes="62px" />
+          <BrandName className="hidden font-serif text-[17px] font-medium tracking-[-0.02em] text-[var(--color-fg)] transition-colors group-hover:text-[var(--color-accent)] min-[430px]:inline sm:text-[18px]" />
         </Link>
 
-        <nav className="hidden items-center gap-8 sm:flex">
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              {...(link.external
-                ? { target: "_blank", rel: "noreferrer noopener" }
-                : {})}
-              className="font-mono text-[13px] text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-fg)]"
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
+        <NavLinks links={links} />
 
-        <Link
-          href="/projects"
-          className="inline-flex items-center gap-2 rounded-sm border border-[var(--color-line-3)] px-3.5 py-2 font-mono text-[13px] text-[var(--color-fg)] transition-colors hover:border-[var(--color-accent)] hover:bg-[rgb(74_222_188_/_0.05)]"
-        >
-          <span className="nav-cta-pulse" aria-hidden="true" />
-          View live projects
-        </Link>
+        <div className="flex items-center justify-self-end gap-1.5 sm:gap-2">
+          <IconLink href={TWITTER_URL} label="OpenResearch on X (Twitter)" className="hidden xl:grid">
+            <XMark size={15} />
+          </IconLink>
+          <IconLink href={GITHUB_URL} label="OpenResearch on GitHub" className="hidden xl:grid">
+            <GitHubMark size={16} />
+          </IconLink>
+          <ThemeToggle />
+          <Link
+            href="/projects"
+            className="btn-brand ml-1 px-3.5 py-2 font-mono text-[13px] whitespace-nowrap"
+          >
+            <span className="nav-cta-pulse hidden sm:block" aria-hidden="true" />
+            <span className="hidden sm:inline">View live projects</span>
+            <span className="sm:hidden">Projects</span>
+          </Link>
+        </div>
       </div>
     </header>
+  );
+}
+
+function IconLink({
+  href,
+  label,
+  children,
+  className = "",
+}: {
+  href: string;
+  label: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer noopener"
+      aria-label={label}
+      title={label}
+      className={`size-9 place-items-center rounded-sm border border-[var(--color-line-2)] bg-[var(--color-bg-soft)] text-[var(--color-fg-muted)] transition-colors hover:border-[var(--color-fg)] hover:text-[var(--color-fg)] ${className}`}
+    >
+      {children}
+    </a>
   );
 }
