@@ -15,7 +15,7 @@
  * client; set NEXT_PUBLIC_DATA_SOURCE=stellar to read from the Soroban contract.
  */
 export const DATA_SOURCE = (
-  process.env.NEXT_PUBLIC_DATA_SOURCE ?? "solana"
+  process.env.NEXT_PUBLIC_DATA_SOURCE ?? "stellar"
 ).toLowerCase();
 export const USE_STELLAR_DATA = DATA_SOURCE === "stellar";
 
