@@ -51,7 +51,7 @@ export function StellarProjectsView({
       <div className="hero-grid-bg" />
       <div className="container-page relative py-14 md:py-18">
         {/* Header */}
-        <div className="grid grid-cols-1 items-end gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16">
+        <div className="grid grid-cols-1 items-end gap-8 lg:grid-cols-[1fr_auto] lg:gap-16">
           <div>
             <p className="label flex items-center gap-2">
               <StellarMark size={13} className="text-[var(--color-accent)]" />
@@ -122,7 +122,7 @@ export function StellarProjectsView({
         {/* Projects table */}
         <div className="projects-table mt-8 overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[var(--color-bg-soft)]">
           {/* header row */}
-          <div className="hidden grid-cols-[64px_minmax(0,1.4fr)_minmax(0,1fr)_120px_140px_120px_40px] gap-4 border-b border-[var(--color-line)] bg-[var(--color-bg-2)] px-5 py-3 font-mono text-[10px] font-semibold tracking-[0.14em] text-[var(--color-fg-muted)] uppercase md:grid">
+          <div className="hidden grid-cols-[64px_2fr_1fr_120px_140px_120px_40px] gap-4 border-b border-[var(--color-line)] bg-[var(--color-bg-2)] px-5 py-3 font-mono text-[10px] font-semibold tracking-[0.14em] text-[var(--color-fg-muted)] uppercase md:grid">
             <span>ID</span>
             <span>Project · creator</span>
             <span>Best score</span>
@@ -138,7 +138,7 @@ export function StellarProjectsView({
               <Link
                 key={p.id}
                 href={`/projects/${p.id}`}
-                className="project-row relative grid grid-cols-2 gap-x-4 gap-y-2 border-b border-[var(--color-line)] px-5 py-4 last:border-b-0 md:grid-cols-[64px_minmax(0,1.4fr)_minmax(0,1fr)_120px_140px_120px_40px] md:items-center"
+                className="project-row relative grid grid-cols-2 gap-x-4 gap-y-2 border-b border-[var(--color-line)] px-5 py-4 last:border-b-0 md:grid-cols-[64px_2fr_1fr_120px_140px_120px_40px] md:items-center"
               >
                 <span className="project-row-edge" aria-hidden="true" />
 

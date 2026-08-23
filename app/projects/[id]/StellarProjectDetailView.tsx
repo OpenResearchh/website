@@ -12,6 +12,10 @@ import type {
 } from "@/lib/stellar/read";
 import { CopyTextButton } from "../../components/CopyTextButton";
 import { ArrowUpRight, StellarMark } from "../../components/icons";
+import { ScoreProgress } from "./ScoreProgress";
+
+const MINE_COMMAND =
+  "npx skills add OpenResearchh/skill --skill autoresearch-mine";
 
 function fmt(n: number): string {
   if (!Number.isFinite(n)) return "—";
@@ -22,6 +26,18 @@ function thresholdMetric(p: StellarProjectView): number {
   if (!p.metricScale) return 0;
   const raw = Number(p.improvementThreshold) / p.metricScale;
   return p.direction === "Minimize" ? -raw : raw;
+}
+
+function metricOf(rawScore: string, p: StellarProjectView): number {
+  if (!p.metricScale) return 0;
+  const raw = Number(rawScore) / p.metricScale;
+  return p.direction === "Minimize" ? -raw : raw;
+}
+
+function improvedPercent(p: StellarProjectView): number {
+  const base = Number(p.baselineScore);
+  if (!base) return 0;
+  return ((Number(p.currentBestScore) - base) / Math.abs(base)) * 100;
 }
 
 export function StellarProjectDetailView({
@@ -128,6 +144,117 @@ export function StellarProjectDetailView({
             Scores are oriented so larger is better; the metric is {project.direction.toLowerCase()}d
             at scale {project.metricScale.toLocaleString()}.
           </p>
+
+          <div className="mt-6">
+            <ScoreProgress
+              baseline={project.baselineMetric}
+              best={project.currentBestMetric}
+              target={thresholdMetric(project)}
+              improvedPct={improvedPercent(project)}
+              proposals={proposals.map((pr) => ({
+                id: pr.id,
+                score:
+                  pr.verifiedScore !== null
+                    ? metricOf(pr.verifiedScore, project)
+                    : pr.claimedScore
+                      ? metricOf(pr.claimedScore, project)
+                      : null,
+                status: pr.status,
+              }))}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* How to mine */}
+      <section className="border-b border-[var(--color-line)]">
+        <div className="container-page py-12 md:py-16">
+          <p className="label">Start mining this project</p>
+          <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_1fr] lg:gap-10">
+            <div>
+              <p className="max-w-xl font-sans text-[15px] leading-relaxed text-[var(--color-fg-muted)]">
+                Point a coding agent at this project with the mining skill. It reads
+                project #{project.id} live from the contract, produces a candidate
+                that beats the current best, and submits it with stake. A verifier
+                reproduces the score and, if it clears the threshold, the reward is
+                paid on-chain.
+              </p>
+
+              <div className="mt-5 overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-line-2)] bg-[var(--color-bg-ink)]">
+                <div className="flex items-center justify-between border-b border-[rgb(255_255_255_/_0.08)] px-4 py-2">
+                  <span className="font-mono text-[10px] tracking-[0.12em] text-[rgb(255_255_255_/_0.5)] uppercase">
+                    Install the mining skill
+                  </span>
+                  <CopyTextButton
+                    text={MINE_COMMAND}
+                    label="Copy mine command"
+                    variant="icon"
+                  />
+                </div>
+                <pre className="overflow-x-auto px-4 py-3.5">
+                  <code className="font-mono text-[13px] text-[#f6f7fb]">
+                    <span className="mr-2 select-none text-[var(--color-brand)]">
+                      $
+                    </span>
+                    {MINE_COMMAND}
+                  </code>
+                </pre>
+              </div>
+
+              <ol className="mt-5 space-y-2.5">
+                {[
+                  `Beat the current best — reach at least ${fmt(thresholdMetric(project))} (${(project.minImprovementBips / 100).toLocaleString(undefined, { maximumFractionDigits: 2 })}% over the best).`,
+                  `Stake at least ${formatStroopsToXlm(project.minimumStake)} XLM to submit a candidate.`,
+                  "A verifier reproduces your score in a trusted environment.",
+                  `On approval your stake is returned and ${formatStroopsToXlm(project.rewardPerApproval)} XLM is paid to you.`,
+                ].map((step, i) => (
+                  <li
+                    key={i}
+                    className="flex gap-3 font-sans text-[14px] leading-relaxed text-[var(--color-fg-muted)]"
+                  >
+                    <span className="tick mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border border-[var(--color-line-2)] bg-[var(--color-bg-2)] text-[11px] font-semibold text-[var(--color-fg)]">
+                      {i + 1}
+                    </span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            {/* Reward availability */}
+            <div className="rounded-[var(--radius-md)] border border-[var(--color-brand-line)] bg-[var(--color-brand-subtle)] p-5">
+              <p className="label text-[var(--color-amber)]">Reward available</p>
+              <p className="tick mt-3 text-[40px] leading-none font-medium tracking-tight text-[var(--color-fg)]">
+                {formatStroopsToXlm(project.rewardPoolBalance)}{" "}
+                <span className="text-[18px] text-[var(--color-fg-muted)]">XLM</span>
+              </p>
+              <p className="mt-1 font-mono text-[11px] text-[var(--color-fg-dim)]">
+                remaining in the reward pool
+              </p>
+
+              <dl className="mt-5 space-y-3 border-t border-[var(--color-brand-line)] pt-4 font-mono text-[12px]">
+                <Stat
+                  k="Per approval"
+                  v={`${formatStroopsToXlm(project.rewardPerApproval)} XLM`}
+                />
+                <Stat
+                  k="Approvals fundable"
+                  v={
+                    BigInt(project.rewardPerApproval) > 0n
+                      ? `≈ ${(
+                          BigInt(project.rewardPoolBalance) /
+                          BigInt(project.rewardPerApproval)
+                        ).toLocaleString()}`
+                      : "—"
+                  }
+                />
+                <Stat
+                  k="Minimum stake"
+                  v={`${formatStroopsToXlm(project.minimumStake)} XLM`}
+                />
+              </dl>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -171,8 +298,20 @@ export function StellarProjectDetailView({
       <section className="border-b border-[var(--color-line)]">
         <div className="container-page py-12 md:py-16">
           <p className="label">Git commitments</p>
+          <p className="mt-3 max-w-2xl font-sans text-sm leading-relaxed text-[var(--color-fg-muted)]">
+            The chain stores integrity commitments, not repository URLs or
+            archives. The repository identity is a SHA-256 of{" "}
+            <code className="rounded-sm bg-[var(--color-bg-2)] px-1.5 py-0.5 font-mono text-[12px]">
+              host/owner/repo
+            </code>
+            , so the source can be verified but not reversed to a link from
+            on-chain state alone.
+          </p>
           <div className="mt-6 divide-y divide-[var(--color-line)] rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[var(--color-bg-soft)]">
-            <HashRow label="Baseline repo hash" value={project.baselineRepoHash} />
+            <HashRow
+              label="Repository identity (sha256)"
+              value={project.baselineRepoHash}
+            />
             <HashRow label="Baseline commit" value={project.baselineCommit} />
             {project.hasCurrentBest && project.currentBestMiner ? (
               <div className="flex flex-col gap-2 px-5 py-4 md:flex-row md:items-center md:justify-between">
@@ -215,7 +354,7 @@ export function StellarProjectDetailView({
             </div>
           ) : (
             <div className="mt-6 overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[var(--color-bg-soft)]">
-              <div className="hidden grid-cols-[56px_minmax(0,1fr)_120px_120px_120px] gap-4 border-b border-[var(--color-line)] bg-[var(--color-bg-2)] px-5 py-3 font-mono text-[10px] font-semibold tracking-[0.14em] text-[var(--color-fg-muted)] uppercase md:grid">
+              <div className="hidden grid-cols-[56px_1fr_120px_120px_120px] gap-4 border-b border-[var(--color-line)] bg-[var(--color-bg-2)] px-5 py-3 font-mono text-[10px] font-semibold tracking-[0.14em] text-[var(--color-fg-muted)] uppercase md:grid">
                 <span>ID</span>
                 <span>Miner</span>
                 <span>Claimed</span>
@@ -225,7 +364,7 @@ export function StellarProjectDetailView({
               {proposals.map((pr) => (
                 <div
                   key={pr.id}
-                  className="grid grid-cols-2 gap-x-4 gap-y-1.5 border-b border-[var(--color-line)] px-5 py-4 last:border-b-0 md:grid-cols-[56px_minmax(0,1fr)_120px_120px_120px] md:items-center"
+                  className="grid grid-cols-2 gap-x-4 gap-y-1.5 border-b border-[var(--color-line)] px-5 py-4 last:border-b-0 md:grid-cols-[56px_1fr_120px_120px_120px] md:items-center"
                 >
                   <span className="tick text-[14px] font-medium text-[var(--color-fg)]">
                     #{pr.id}
@@ -285,6 +424,15 @@ function Metric({
           {sub}
         </p>
       ) : null}
+    </div>
+  );
+}
+
+function Stat({ k, v }: { k: string; v: string }) {
+  return (
+    <div className="flex items-center justify-between gap-4">
+      <dt className="text-[var(--color-fg-muted)]">{k}</dt>
+      <dd className="tick font-medium text-[var(--color-fg)]">{v}</dd>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { NavLinks } from "./NavLinks";
 import { ThemeToggle } from "./ThemeToggle";
 import { GitHubMark, XMark } from "./icons";
 
@@ -35,17 +36,7 @@ export function Nav() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 justify-self-center sm:flex">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="font-mono text-[13px] text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-fg)]"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+        <NavLinks links={links} />
 
         <div className="flex items-center justify-self-end gap-1.5 sm:gap-2">
           <IconLink href={TWITTER_URL} label="OpenResearch on X (Twitter)">
