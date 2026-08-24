@@ -43,7 +43,23 @@ function tokenizeInline(input: string): InlineToken[] {
   return tokens;
 }
 
-function renderInline(input: string, keyPrefix: string): ReactNode[] {
+function safeLinkHref(href: string, baseUrl?: string): string | null {
+  if (href.startsWith("#")) return href;
+  try {
+    const url = baseUrl ? new URL(href, baseUrl) : new URL(href);
+    return url.protocol === "https:" || url.protocol === "http:"
+      ? url.toString()
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+function renderInline(
+  input: string,
+  keyPrefix: string,
+  baseUrl?: string,
+): ReactNode[] {
   return tokenizeInline(input).map((tok, i) => {
     const key = `${keyPrefix}-${i}`;
     switch (tok.kind) {
@@ -69,16 +85,19 @@ function renderInline(input: string, keyPrefix: string): ReactNode[] {
           </em>
         );
       case "link":
-        return (
+        const href = safeLinkHref(tok.href, baseUrl);
+        return href ? (
           <a
             key={key}
-            href={tok.href}
+            href={href}
             target="_blank"
             rel="noreferrer noopener"
             className="text-[var(--color-accent)] underline underline-offset-4 decoration-[var(--color-accent-dim)] hover:text-[var(--color-accent)] hover:decoration-[var(--color-accent)]"
           >
             {tok.value}
           </a>
+        ) : (
+          <span key={key}>{tok.value}</span>
         );
       case "text":
       default:
@@ -239,7 +258,13 @@ const HEADING_CLASS: Record<number, string> = {
   6: "mt-6 mb-2 font-mono text-xs font-semibold uppercase tracking-wider text-[var(--color-fg-muted)] first:mt-0",
 };
 
-export function Markdown({ source }: { source: string }) {
+export function Markdown({
+  source,
+  baseUrl,
+}: {
+  source: string;
+  baseUrl?: string;
+}) {
   const blocks = parseBlocks(source);
 
   return (
@@ -257,14 +282,14 @@ export function Markdown({ source }: { source: string }) {
               | "h6";
             return (
               <Tag key={key} className={HEADING_CLASS[block.level]}>
-                {renderInline(block.text, key)}
+                {renderInline(block.text, key, baseUrl)}
               </Tag>
             );
           }
           case "paragraph":
             return (
               <p key={key} className="my-4 first:mt-0">
-                {renderInline(block.text, key)}
+                {renderInline(block.text, key, baseUrl)}
               </p>
             );
           case "code":
@@ -283,7 +308,9 @@ export function Markdown({ source }: { source: string }) {
                 className="my-4 ml-5 list-decimal space-y-1.5 marker:text-[var(--color-fg-dim)]"
               >
                 {block.items.map((it, j) => (
-                  <li key={`${key}-${j}`}>{renderInline(it, `${key}-${j}`)}</li>
+                  <li key={`${key}-${j}`}>
+                    {renderInline(it, `${key}-${j}`, baseUrl)}
+                  </li>
                 ))}
               </ol>
             ) : (
@@ -292,7 +319,9 @@ export function Markdown({ source }: { source: string }) {
                 className="my-4 ml-5 list-disc space-y-1.5 marker:text-[var(--color-fg-dim)]"
               >
                 {block.items.map((it, j) => (
-                  <li key={`${key}-${j}`}>{renderInline(it, `${key}-${j}`)}</li>
+                  <li key={`${key}-${j}`}>
+                    {renderInline(it, `${key}-${j}`, baseUrl)}
+                  </li>
                 ))}
               </ul>
             );
@@ -302,7 +331,7 @@ export function Markdown({ source }: { source: string }) {
                 key={key}
                 className="my-5 border-l-2 border-[var(--color-brand-line)] pl-4 italic text-[var(--color-fg-dim)]"
               >
-                {renderInline(block.text, key)}
+                {renderInline(block.text, key, baseUrl)}
               </blockquote>
             );
           case "hr":
@@ -326,7 +355,7 @@ export function Markdown({ source }: { source: string }) {
                           key={`${key}-h-${j}`}
                           className="border-b border-[var(--color-line)] px-3 py-2 text-left font-mono text-[11px] uppercase tracking-wider text-[var(--color-fg-muted)]"
                         >
-                          {renderInline(h, `${key}-h-${j}`)}
+                          {renderInline(h, `${key}-h-${j}`, baseUrl)}
                         </th>
                       ))}
                     </tr>
@@ -339,7 +368,7 @@ export function Markdown({ source }: { source: string }) {
                             key={`${key}-r-${r}-${j}`}
                             className="border-t border-[var(--color-line)] px-3 py-2 text-[var(--color-fg-muted)]"
                           >
-                            {renderInline(c, `${key}-r-${r}-${j}`)}
+                            {renderInline(c, `${key}-r-${r}-${j}`, baseUrl)}
                           </td>
                         ))}
                       </tr>
