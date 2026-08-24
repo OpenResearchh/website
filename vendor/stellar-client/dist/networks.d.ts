@@ -1,7 +1,7 @@
 export declare const networks: {
-    readonly testnet: {
-        readonly contractId: "CD5EKGUD3Y72UGV2VGQTLUTLOAIGZC6X3LFHARXX2A2D6LBR4IWXAWIQ";
-        readonly networkPassphrase: "Test SDF Network ; September 2015";
-        readonly rpcUrl: "https://soroban-testnet.stellar.org";
+    readonly mainnet: {
+        readonly contractId: "CDGF3SS27QEF4LDV63MSMKVOXZOZM4OTF2BPV5QK3PQEAEMOITUVDMDH";
+        readonly networkPassphrase: "Public Global Stellar Network ; September 2015";
+        readonly rpcUrl: "https://soroban-rpc.mainnet.stellar.gateway.fm";
     };
 };

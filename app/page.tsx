@@ -81,17 +81,14 @@ async function loadStellarHeroStats() {
     const openPools = projects.filter(
       (p) => !p.frozen && BigInt(p.rewardPoolBalance) > 0n,
     ).length;
-    const latest = projects.reduce<string>(
-      (max, p) => (Number(p.id) > Number(max || "0") ? p.id : max),
-      "",
-    );
+    const latest = projects[0]?.id;
 
     return {
       projectCount: projects.length.toLocaleString(),
       acceptedBests: acceptedBests.toLocaleString(),
       openPools: openPools.toLocaleString(),
       cluster: STELLAR_NETWORK,
-      latestProject: latest ? `#${latest}` : "-",
+      latestProject: latest === undefined ? "-" : `#${latest}`,
     };
   } catch {
     return {
