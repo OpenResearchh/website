@@ -6,12 +6,14 @@ import {
   stellarContractUrl,
   truncateStellarId,
 } from "@/lib/stellar/config";
+import type { GitHubProjectProfile } from "@/lib/stellar/github";
 import type {
   StellarProjectView,
   StellarProposalView,
 } from "@/lib/stellar/read";
 import { CopyTextButton } from "../../components/CopyTextButton";
 import { ArrowUpRight, StellarMark } from "../../components/icons";
+import { Markdown } from "../../components/Markdown";
 import { ScoreProgress } from "./ScoreProgress";
 
 const MINE_COMMAND =
@@ -54,11 +56,18 @@ function safeHttpUrl(value: string): string | null {
 export function StellarProjectDetailView({
   project,
   proposals,
+  repository,
 }: {
   project: StellarProjectView;
   proposals: StellarProposalView[];
+  repository: GitHubProjectProfile | null;
 }) {
-  const repositoryUrl = safeHttpUrl(project.cloneUrl);
+  const repositoryUrl =
+    repository?.repositoryUrl ?? safeHttpUrl(project.cloneUrl);
+  const projectTitle = repository?.title ?? `Project #${project.id}`;
+  const projectSummary =
+    repository?.summary ??
+    "Canonical protocol state read live from the OpenResearch contract. A candidate is accepted only when a verifier reproduces a score that clears the improvement threshold.";
   const improved =
     BigInt(project.currentBestScore) > BigInt(project.baselineScore);
 
@@ -103,15 +112,36 @@ export function StellarProjectDetailView({
           </div>
 
           <h1 className="mt-5 font-serif text-[38px] leading-[1.03] font-medium tracking-[-0.01em] text-[var(--color-fg)] md:text-[52px]">
-            Project #{project.id}
+            {projectTitle}
           </h1>
           <p className="mt-3 max-w-2xl font-sans text-[15px] leading-relaxed text-[var(--color-fg-muted)]">
-            Canonical protocol state read live from the OpenResearch contract.
-            A candidate is accepted only when a verifier reproduces a score that
-            clears the improvement threshold.
+            {projectSummary}
           </p>
 
+          {repository?.summarySource ? (
+            <a
+              href={repository.summarySource.url}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="mt-3 inline-flex items-center gap-1.5 font-mono text-[11px] text-[var(--color-fg-dim)] hover:text-[var(--color-accent)]"
+            >
+              Description from {repository.summarySource.path} at baseline
+              <ArrowUpRight size={10} />
+            </a>
+          ) : null}
+
           <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs">
+            {repositoryUrl ? (
+              <a
+                href={repositoryUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="inline-flex items-center gap-1.5 text-[var(--color-accent)] hover:underline"
+              >
+                View repository
+                <ArrowUpRight size={12} />
+              </a>
+            ) : null}
             <a
               href={stellarAccountUrl(project.creator)}
               target="_blank"
@@ -128,7 +158,7 @@ export function StellarProjectDetailView({
               href={stellarContractUrl()}
               target="_blank"
               rel="noreferrer noopener"
-              className="inline-flex items-center gap-1.5 text-[var(--color-accent)] hover:underline"
+              className="inline-flex items-center gap-1.5 text-[var(--color-fg-dim)] hover:text-[var(--color-accent)] hover:underline"
             >
               View contract on Stellar Expert
               <ArrowUpRight size={12} />
@@ -142,6 +172,13 @@ export function StellarProjectDetailView({
         <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:gap-14">
           {/* ---- Main column ---- */}
           <div className="min-w-0 space-y-12">
+            {repository?.readme ? (
+              <RepositoryOverview
+                repository={repository}
+                baselineCommit={project.baselineCommit}
+              />
+            ) : null}
+
             {/* Score frontier */}
             <div>
               <SectionHead title="Score frontier" />
@@ -274,7 +311,11 @@ export function StellarProjectDetailView({
                   label="Repository identity (sha256)"
                   value={project.baselineRepoHash}
                 />
-                <HashRow label="Baseline commit" value={project.baselineCommit} />
+                <HashRow
+                  label="Baseline commit"
+                  value={project.baselineCommit}
+                  href={repository?.commitUrl}
+                />
                 {project.hasCurrentBest && project.currentBestMiner ? (
                   <div className="flex flex-col gap-2 px-5 py-4 md:flex-row md:items-center md:justify-between">
                     <span className="font-mono text-[11px] tracking-[0.08em] text-[var(--color-fg-muted)] uppercase">
@@ -427,6 +468,43 @@ function SectionHead({ title }: { title: string }) {
   return <p className="label">{title}</p>;
 }
 
+function RepositoryOverview({
+  repository,
+  baselineCommit,
+}: {
+  repository: GitHubProjectProfile;
+  baselineCommit: string;
+}) {
+  if (!repository.readme) return null;
+  return (
+    <section aria-labelledby="project-overview-title">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p className="label">Project overview</p>
+          <h2
+            id="project-overview-title"
+            className="mt-2 font-serif text-[28px] leading-tight font-medium text-[var(--color-fg)] md:text-[34px]"
+          >
+            About {repository.title}
+          </h2>
+        </div>
+        <a
+          href={repository.readme.url}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="inline-flex items-center gap-1.5 font-mono text-[11px] text-[var(--color-accent)] hover:underline"
+        >
+          {repository.readme.path} · {baselineCommit.slice(0, 7)}
+          <ArrowUpRight size={11} />
+        </a>
+      </div>
+      <div className="mt-5 rounded-[var(--radius-lg)] border border-[var(--color-line)] bg-[var(--color-bg-soft)] p-5 md:p-7">
+        <Markdown source={repository.readme.text} baseUrl={repository.readme.url} />
+      </div>
+    </section>
+  );
+}
+
 function Metric({
   label,
   value,
@@ -466,16 +544,36 @@ function Stat({ k, v }: { k: string; v: string }) {
   );
 }
 
-function HashRow({ label, value }: { label: string; value: string }) {
+function HashRow({
+  label,
+  value,
+  href,
+}: {
+  label: string;
+  value: string;
+  href?: string;
+}) {
   return (
     <div className="flex flex-col gap-2 px-5 py-4 md:flex-row md:items-center md:justify-between">
       <span className="font-mono text-[11px] tracking-[0.08em] text-[var(--color-fg-muted)] uppercase">
         {label}
       </span>
       <span className="flex items-center gap-2">
-        <code className="max-w-[60vw] truncate font-mono text-[12px] text-[var(--color-fg-muted)] md:max-w-[420px]">
-          {value || "—"}
-        </code>
+        {href && value ? (
+          <a
+            href={href}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="inline-flex max-w-[60vw] items-center gap-1.5 truncate font-mono text-[12px] text-[var(--color-accent)] hover:underline md:max-w-[420px]"
+          >
+            <code className="truncate">{value}</code>
+            <ArrowUpRight size={10} className="shrink-0" />
+          </a>
+        ) : (
+          <code className="max-w-[60vw] truncate font-mono text-[12px] text-[var(--color-fg-muted)] md:max-w-[420px]">
+            {value || "—"}
+          </code>
+        )}
         {value ? (
           <CopyTextButton text={value} label={label} variant="icon" />
         ) : null}

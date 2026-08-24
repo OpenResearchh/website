@@ -33,6 +33,7 @@ import {
 import { renderProtocolMarkdown } from "@/lib/openResearch/protocolMarkdown";
 import { priceAtSupply } from "@/lib/openResearch/trade";
 import { USE_STELLAR_DATA } from "@/lib/stellar/config";
+import { getGitHubProjectProfile } from "@/lib/stellar/github";
 import {
   getStellarOpenProposals,
   getStellarProject,
@@ -65,9 +66,17 @@ export async function generateMetadata({
   if (USE_STELLAR_DATA) {
     const project = await getStellarProject(projectId).catch(() => null);
     if (!project) return { title: `Project #${id}` };
+    const repository = await getGitHubProjectProfile(
+      project.cloneUrl,
+      project.baselineCommit,
+    ).catch(() => null);
     return {
-      title: `Project #${project.id} · Registry`,
-      description: `On-chain protocol, benchmark, and current best score for project #${project.id} on the OpenResearch contract.`,
+      title: repository
+        ? repository.title
+        : `Project #${project.id} · Registry`,
+      description:
+        repository?.summary ??
+        `On-chain protocol, benchmark, and current best score for project #${project.id} on the OpenResearch contract.`,
     };
   }
 
@@ -96,13 +105,22 @@ async function StellarProjectPage({ projectId }: { projectId: number }) {
     notFound();
   }
 
-  const proposals = await getStellarOpenProposals(projectId).catch(() => []);
+  const [proposals, repository] = await Promise.all([
+    getStellarOpenProposals(projectId).catch(() => []),
+    getGitHubProjectProfile(project.cloneUrl, project.baselineCommit).catch(
+      () => null,
+    ),
+  ]);
 
   return (
     <>
       <Nav />
       <main>
-        <StellarProjectDetailView project={project} proposals={proposals} />
+        <StellarProjectDetailView
+          project={project}
+          proposals={proposals}
+          repository={repository}
+        />
       </main>
       <Footer />
     </>
