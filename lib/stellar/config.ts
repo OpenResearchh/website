@@ -2,17 +2,12 @@
  * Stellar / Soroban deployment configuration (single source of truth).
  *
  * Canonical protocol state and settlement live in the OpenResearch Soroban
- * contract on Stellar. These values come from the integration handoff and can
- * be overridden per-environment via NEXT_PUBLIC_* vars.
- *
- * NOTE: the live projects UI still reads from the existing program client; this
- * module currently powers the contract link surfaced in the footer and is the
- * home for the Soroban data layer as it comes online.
+ * contract on Stellar Mainnet. These public values can be overridden per
+ * environment via NEXT_PUBLIC_* vars.
  */
 
 /**
- * Which chain backs the live data surfaces. Defaults to the existing program
- * client; set NEXT_PUBLIC_DATA_SOURCE=stellar to read from the Soroban contract.
+ * Which chain backs the live data surfaces.
  */
 export const DATA_SOURCE = (
   process.env.NEXT_PUBLIC_DATA_SOURCE ?? "stellar"
@@ -20,34 +15,34 @@ export const DATA_SOURCE = (
 export const USE_STELLAR_DATA = DATA_SOURCE === "stellar";
 
 export const STELLAR_NETWORK =
-  process.env.NEXT_PUBLIC_STELLAR_NETWORK ?? "testnet";
+  process.env.NEXT_PUBLIC_STELLAR_NETWORK ?? "mainnet";
+
+/** Stellar Expert calls Mainnet `public` in explorer URLs. */
+export const STELLAR_EXPLORER_NETWORK =
+  process.env.NEXT_PUBLIC_STELLAR_EXPLORER_NETWORK ?? "public";
 
 export const STELLAR_CONTRACT_ID =
   process.env.NEXT_PUBLIC_STELLAR_CONTRACT_ID ??
-  "CD5EKGUD3Y72UGV2VGQTLUTLOAIGZC6X3LFHARXX2A2D6LBR4IWXAWIQ";
-
-export const STELLAR_TOKEN_CONTRACT_ID =
-  process.env.NEXT_PUBLIC_STELLAR_TOKEN_CONTRACT_ID ??
-  "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC";
+  "CDGF3SS27QEF4LDV63MSMKVOXZOZM4OTF2BPV5QK3PQEAEMOITUVDMDH";
 
 export const STELLAR_RPC_URL =
   process.env.NEXT_PUBLIC_STELLAR_RPC_URL ??
-  "https://soroban-testnet.stellar.org";
+  "https://soroban-rpc.mainnet.stellar.gateway.fm";
 
 export const STELLAR_NETWORK_PASSPHRASE =
   process.env.NEXT_PUBLIC_STELLAR_NETWORK_PASSPHRASE ??
-  "Test SDF Network ; September 2015";
+  "Public Global Stellar Network ; September 2015";
 
 /** stellar.expert explorer link for a contract on the active network. */
 export function stellarContractUrl(
   contractId: string = STELLAR_CONTRACT_ID,
 ): string {
-  return `https://stellar.expert/explorer/${STELLAR_NETWORK}/contract/${contractId}`;
+  return `https://stellar.expert/explorer/${STELLAR_EXPLORER_NETWORK}/contract/${contractId}`;
 }
 
 /** stellar.expert explorer link for an account/address on the active network. */
 export function stellarAccountUrl(address: string): string {
-  return `https://stellar.expert/explorer/${STELLAR_NETWORK}/account/${address}`;
+  return `https://stellar.expert/explorer/${STELLAR_EXPLORER_NETWORK}/account/${address}`;
 }
 
 /** Middle-truncate a Stellar address/contract id for compact display. */

@@ -40,6 +40,17 @@ function improvedPercent(p: StellarProjectView): number {
   return ((Number(p.currentBestScore) - base) / Math.abs(base)) * 100;
 }
 
+function safeHttpUrl(value: string): string | null {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" || url.protocol === "http:"
+      ? url.toString()
+      : null;
+  } catch {
+    return null;
+  }
+}
+
 export function StellarProjectDetailView({
   project,
   proposals,
@@ -47,6 +58,7 @@ export function StellarProjectDetailView({
   project: StellarProjectView;
   proposals: StellarProposalView[];
 }) {
+  const repositoryUrl = safeHttpUrl(project.cloneUrl);
   const improved =
     BigInt(project.currentBestScore) > BigInt(project.baselineScore);
 
@@ -232,15 +244,32 @@ export function StellarProjectDetailView({
             <div>
               <SectionHead title="Git commitments" />
               <p className="mt-3 max-w-2xl font-sans text-sm leading-relaxed text-[var(--color-fg-muted)]">
-                The chain stores integrity commitments, not repository URLs. The
-                repository identity is a SHA-256 of{" "}
+                The contract stores the repository URL alongside integrity
+                commitments. The repository identity is a SHA-256 of{" "}
                 <code className="rounded-sm bg-[var(--color-bg-2)] px-1.5 py-0.5 font-mono text-[12px]">
                   host/owner/repo
                 </code>
-                , so the source can be verified but not reversed to a link from
-                on-chain state alone.
+                , allowing consumers to verify the advertised source and exact
+                baseline commit.
               </p>
               <div className="mt-5 divide-y divide-[var(--color-line)] overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[var(--color-bg-soft)]">
+                {repositoryUrl ? (
+                  <div className="flex flex-col gap-2 px-5 py-4 md:flex-row md:items-center md:justify-between">
+                    <span className="font-mono text-[11px] tracking-[0.08em] text-[var(--color-fg-muted)] uppercase">
+                      Repository
+                    </span>
+                    <a
+                      href={repositoryUrl}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="inline-flex max-w-[60vw] items-center gap-1.5 truncate font-mono text-[12px] text-[var(--color-accent)] hover:underline md:max-w-[420px]"
+                    >
+                      <span className="truncate">{project.cloneUrl}</span>
+                      <ArrowUpRight size={11} className="shrink-0" />
+                    </a>
+                  </div>
+                ) : null}
+                <HashRow label="Protocol (sha256)" value={project.protocolHash} />
                 <HashRow
                   label="Repository identity (sha256)"
                   value={project.baselineRepoHash}

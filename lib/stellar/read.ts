@@ -40,6 +40,8 @@ export interface StellarProjectView {
   rewardPoolBalance: string;
   rewardPerApproval: string;
   minimumStake: string;
+  cloneUrl: string;
+  protocolHash: string;
   /** integrity commitments (hex) */
   baselineRepoHash: string;
   baselineCommit: string;
@@ -101,13 +103,15 @@ function mapProject(p: generated.Project): StellarProjectView {
     rewardPoolBalance: p.reward_pool_balance.toString(),
     rewardPerApproval: p.reward_per_approval.toString(),
     minimumStake: p.minimum_stake.toString(),
+    cloneUrl: p.clone_url,
+    protocolHash: toHex(p.protocol_hash),
     baselineRepoHash: toHex(p.baseline?.repo),
     baselineCommit: p.baseline?.commit ? formatCommitId(p.baseline.commit) : "",
     explorerUrl: stellarContractUrl(),
   };
 }
 
-/** Highest assigned project id + 1. Project ids run 1..(next-1). */
+/** Highest assigned project id + 1. Project ids run 0..(next-1). */
 export async function getStellarNextProjectId(): Promise<bigint> {
   const tx = await getClient().next_project_id();
   return tx.result as bigint;
@@ -115,7 +119,7 @@ export async function getStellarNextProjectId(): Promise<bigint> {
 
 export async function getStellarProjectCount(): Promise<number> {
   const next = await getStellarNextProjectId();
-  return Math.max(0, Number(next) - 1);
+  return Math.max(0, Number(next));
 }
 
 export async function getStellarProject(
@@ -139,10 +143,14 @@ export async function getStellarProject(
 export async function listStellarProjects(
   limit = 100,
 ): Promise<StellarProjectView[]> {
-  const count = await getStellarProjectCount();
-  if (count <= 0) return [];
+  const nextProjectId = await getStellarNextProjectId();
+  if (nextProjectId <= 0n) return [];
   const ids: bigint[] = [];
-  for (let id = BigInt(count); id >= 1n && ids.length < limit; id--) {
+  for (
+    let id = nextProjectId - 1n;
+    id >= 0n && ids.length < limit;
+    id--
+  ) {
     ids.push(id);
   }
   const results = await Promise.all(ids.map((id) => getStellarProject(id)));
@@ -162,6 +170,7 @@ export interface StellarProposalView {
   reviewLockUntil: string;
   protocolEpoch: number;
   candidateCommit: string;
+  cloneUrl: string;
 }
 
 function mapProposal(p: generated.Proposal): StellarProposalView {
@@ -183,6 +192,7 @@ function mapProposal(p: generated.Proposal): StellarProposalView {
     candidateCommit: p.candidate?.commit
       ? formatCommitId(p.candidate.commit)
       : "",
+    cloneUrl: p.clone_url,
   };
 }
 

@@ -4,6 +4,12 @@ import type { u32, u64, i128, Option } from "@stellar/stellar-sdk/contract";
 export * from "@stellar/stellar-sdk";
 export * as contract from "@stellar/stellar-sdk/contract";
 export * as rpc from "@stellar/stellar-sdk/rpc";
+export declare const networks: {
+    readonly unknown: {
+        readonly networkPassphrase: "Public Global Stellar Network ; September 2015";
+        readonly contractId: "CDGF3SS27QEF4LDV63MSMKVOXZOZM4OTF2BPV5QK3PQEAEMOITUVDMDH";
+    };
+};
 export interface Config {
     admin: string;
     review_lock_ledgers: u32;
@@ -16,6 +22,7 @@ export interface GitRef {
 export interface Project {
     baseline: GitRef;
     baseline_score: i128;
+    clone_url: string;
     creator: string;
     current_best: GitRefSlot;
     current_best_miner: Option<string>;
@@ -47,6 +54,7 @@ export interface Proposal {
     base_commit: CommitId;
     candidate: GitRef;
     claimed_score: i128;
+    clone_url: string;
     id: u64;
     merged_commit: CommitSlot;
     miner: string;
@@ -89,6 +97,7 @@ export interface SubmitInput {
     base_commit: CommitId;
     candidate: GitRef;
     claimed_score: i128;
+    clone_url: string;
     project_id: u64;
     reward_recipient: string;
     stake: i128;
@@ -115,6 +124,7 @@ export type ProposalStatus = {
 export interface CreateProjectInput {
     baseline: GitRef;
     baseline_score: i128;
+    clone_url: string;
     direction: Direction;
     metric_scale: u32;
     min_improvement_bips: u32;
@@ -162,6 +172,9 @@ export declare const Errors: {
         message: string;
     };
     104: {
+        message: string;
+    };
+    105: {
         message: string;
     };
     106: {
@@ -344,11 +357,12 @@ export interface Client {
     /**
      * Construct and simulate a amend_protocol transaction. Returns an `AssembledTransaction` object which will have a `result` field containing the result of the simulation. If this transaction changes contract state, you will need to call `signAndSend()` on the returned object.
      */
-    amend_protocol: ({ creator, project_id, protocol_hash, baseline, baseline_score }: {
+    amend_protocol: ({ creator, project_id, protocol_hash, baseline, clone_url, baseline_score }: {
         creator: string;
         project_id: u64;
         protocol_hash: Buffer;
         baseline: GitRef;
+        clone_url: string;
         baseline_score: i128;
     }, options?: MethodOptions) => Promise<AssembledTransaction<Result<void>>>;
     /**
