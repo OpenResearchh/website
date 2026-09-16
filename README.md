@@ -46,10 +46,31 @@ app/
     TokenFlow.tsx
     GetStarted.tsx
     Footer.tsx
+  ore/                 # /ore — landing page for ORE, the macOS agent workspace
+    page.tsx           # standalone: own header/footer, not the protocol nav
+    OreHeader.tsx      # floating glass capsule, contracts once scrolled
+    OreChrome.tsx      # ORE footer
+    OreInstall.tsx     # Homebrew / curl install tabs
+    OreDemoVideo.tsx   # hero demo video with a pause control
+    OreAssistant.tsx   # the assistant section (claims checked against v0.7.2)
+    OreNative.tsx      # native-Swift stat band (counts checked against v0.7.2)
+    OreActivity.tsx    # GitHub-style commit heatmap
+    activity.json      # dated snapshot of commits per day (see its `source`)
+    ore.css            # animated wallpaper + liquid-glass surfaces
 public/logos/
   icon.png
   watermark-vertical.png
+public/ore/
+  icon.svg             # ORE app icon for the page: the ore repo's AppIcon.svg,
+                       # comments stripped and viewBox cropped to the tile
+  icon.png             # raster of the same icon, used by the OG image
+  demo.mp4             # hero product demo (trimmed screen recording, no audio)
+  demo-poster.jpg      # its first frame, shown while the video loads
 ```
+
+`/ore/install.sh` is a rewrite (see `next.config.ts`) to the installer in
+`OpenResearchh/ore`, never a copy, so the published `curl … | sh` cannot drift
+from the reviewed script. It resolves only while that repository is public.
 
 Sections map directly to the brand guide and `detail.md`: hero / insight /
 how-it-works / domains / architecture / token flow / get started / footer.

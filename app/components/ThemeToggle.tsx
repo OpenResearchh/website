@@ -4,7 +4,14 @@ import { useEffect, useState } from "react";
 
 type Theme = "light" | "dark";
 
-export function ThemeToggle() {
+const defaultClassName =
+  "grid size-9 place-items-center rounded-sm border border-[var(--color-line-2)] bg-[var(--color-bg-soft)] text-[var(--color-fg-muted)] transition-colors hover:border-[var(--color-fg)] hover:text-[var(--color-fg)]";
+
+export function ThemeToggle({
+  className = defaultClassName,
+}: {
+  className?: string;
+}) {
   const [theme, setTheme] = useState<Theme>("light");
   const [mounted, setMounted] = useState(false);
 
@@ -41,7 +48,7 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
       title={isDark ? "Light mode" : "Dark mode"}
-      className="grid size-9 place-items-center rounded-sm border border-[var(--color-line-2)] bg-[var(--color-bg-soft)] text-[var(--color-fg-muted)] transition-colors hover:border-[var(--color-fg)] hover:text-[var(--color-fg)]"
+      className={className}
     >
       {/* Render nothing theme-specific until mounted to avoid hydration mismatch */}
       <span className="sr-only">Toggle theme</span>

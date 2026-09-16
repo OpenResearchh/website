@@ -25,7 +25,7 @@ const lora = Lora({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://openresearch.xyz"),
+  metadataBase: new URL("https://www.openresearchh.com"),
   title: {
     default: "OpenResearch — The benchmark is the oracle",
     template: "%s · OpenResearch",
