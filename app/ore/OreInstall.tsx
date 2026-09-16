@@ -7,7 +7,9 @@ const methods = [
   {
     id: "brew",
     label: "Homebrew",
-    command: "brew install --cask openresearchh/tap/ore",
+    // No `--cask`: bare `brew install` resolves casks, and this is the exact
+    // command the ore README documents.
+    command: "brew install openresearchh/tap/ore",
   },
   {
     id: "curl",
