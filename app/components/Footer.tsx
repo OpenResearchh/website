@@ -17,6 +17,7 @@ const columns = [
     title: "Build",
     links: [
       { href: "/projects", label: "Live projects" },
+      { href: "/ore", label: "ORE for macOS" },
       { href: "/docs/quickstart", label: "Quickstart" },
       { href: "/docs", label: "Documentation" },
       { href: "/#get-started", label: "Get started" },

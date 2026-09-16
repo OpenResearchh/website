@@ -1,0 +1,135 @@
+/* ORE landing page: an animated wallpaper for the glass to sit on, and the
+   glass surfaces themselves. The wallpaper stays dark in both themes, like a
+   desktop behind the app. Only transforms animate, so it stays cheap. */
+
+.ore-wallpaper {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 80% at 50% 115%, #24173a 0%, transparent 60%),
+    linear-gradient(160deg, #0a0d1b 0%, #11162b 45%, #1b1426 100%);
+}
+
+.ore-wallpaper span {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  will-change: transform;
+}
+
+/* Colors come from the app icon: amber faces, slate-blue faces, a lit core. */
+.ore-wallpaper .ore-blob-amber {
+  width: 62%;
+  left: -14%;
+  top: -30%;
+  background: radial-gradient(closest-side, rgb(255 168 56 / 0.85), rgb(234 108 10 / 0.42) 55%, transparent);
+  animation: ore-drift-a 24s ease-in-out infinite alternate;
+}
+
+.ore-wallpaper .ore-blob-blue {
+  width: 70%;
+  right: -24%;
+  top: -22%;
+  background: radial-gradient(closest-side, rgb(112 142 255 / 0.72), rgb(58 80 200 / 0.38) 55%, transparent);
+  animation: ore-drift-b 30s ease-in-out infinite alternate;
+}
+
+.ore-wallpaper .ore-blob-violet {
+  width: 58%;
+  left: 16%;
+  bottom: -42%;
+  background: radial-gradient(closest-side, rgb(168 118 255 / 0.55), rgb(98 58 200 / 0.28) 55%, transparent);
+  animation: ore-drift-c 34s ease-in-out infinite alternate;
+}
+
+.ore-wallpaper .ore-blob-core {
+  width: 36%;
+  left: 32%;
+  top: 26%;
+  background: radial-gradient(closest-side, rgb(255 212 138 / 0.5), transparent);
+  animation: ore-breathe 9s ease-in-out infinite;
+}
+
+/* A slow sheen sweeping across, like light moving over glass. */
+.ore-wallpaper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 32%, rgb(255 255 255 / 0.06) 46%, transparent 60%);
+  background-size: 250% 100%;
+  animation: ore-sheen 14s ease-in-out infinite;
+}
+
+@keyframes ore-drift-a {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(22%, 18%) scale(1.15); }
+}
+@keyframes ore-drift-b {
+  from { transform: translate(0, 0) scale(1.05); }
+  to { transform: translate(-18%, 22%) scale(0.9); }
+}
+@keyframes ore-drift-c {
+  from { transform: translate(0, 0) scale(0.95); }
+  to { transform: translate(-14%, -20%) scale(1.12); }
+}
+@keyframes ore-breathe {
+  0%, 100% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.1); opacity: 1; }
+}
+@keyframes ore-sheen {
+  from { background-position: 120% 0; }
+  to { background-position: -120% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ore-wallpaper span,
+  .ore-wallpaper::after {
+    animation: none;
+  }
+}
+
+/* Glass: translucent fill, blurred and saturated backdrop, a lit top edge.
+   Follows the page theme. */
+/* The capsule floats over the vivid wallpaper as well as over the plain page,
+   so it carries its own near-opaque tint. A thin white veil picked up the
+   amber behind it and left the nav links unreadable. */
+.ore-glass {
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.82), rgb(255 255 255 / 0.68));
+  border: 1px solid rgb(255 255 255 / 0.75);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    0 10px 30px -14px rgb(15 15 30 / 0.35);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
+}
+
+html[data-theme="dark"] .ore-glass {
+  background: linear-gradient(180deg, rgb(18 20 28 / 0.72), rgb(12 14 20 / 0.62));
+  border-color: rgb(255 255 255 / 0.13);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.14),
+    0 10px 30px -14px rgb(0 0 0 / 0.75);
+}
+
+/* Glass that sits on the wallpaper is always the light-on-dark variant. */
+.ore-glass-on-dark {
+  color: #fff;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.06));
+  border: 1px solid rgb(255 255 255 / 0.22);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.28),
+    0 12px 32px -16px rgb(0 0 0 / 0.6);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  backdrop-filter: blur(18px) saturate(1.6);
+  transition: background-color 200ms ease, border-color 200ms ease;
+}
+
+.ore-glass-on-dark:hover {
+  border-color: rgb(255 255 255 / 0.4);
+}
+
+/* The demo video's scroll zoom lives in OreDemoVideo.tsx: it sits inside
+   clipped panels, where a CSS view() timeline resolves against the nearest
+   scroll container and never advances. */
