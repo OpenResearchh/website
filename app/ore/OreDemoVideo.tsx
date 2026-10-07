@@ -79,17 +79,17 @@ export function OreDemoVideo() {
     >
       <video
         ref={videoRef}
-        src="/ore/demo.mp4"
-        poster="/ore/demo-poster.jpg"
-        width={1374}
-        height={880}
+        src="/ore/demo.mp4?v=2"
+        poster="/ore/demo-poster.jpg?v=2"
+        width={1600}
+        height={1128}
         muted
         loop
         playsInline
         preload="metadata"
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
-        aria-label="Demo of the ORE app: moving between agent workspaces in two repositories, reading what Claude Code did in each, with the changed files and commits in the right panel."
+        aria-label="Demo of the ORE app: an agent working through code edits, tests, and reviews across parallel worktrees."
         className="block h-auto w-full"
       />
       <button

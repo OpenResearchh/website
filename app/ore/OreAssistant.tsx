@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 /* Every claim here is checked against the shipping app (master, v0.7.2):
    the assistant runs without shell/editor/file tools on purpose, routes work
@@ -132,14 +132,7 @@ export function OreAssistant() {
             </p>
           </div>
 
-          {/* The idea in one line: you ask, it routes, an agent does the work. */}
-          <ol className="mt-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-3">
-            <FlowStep icon={<MicGlyph />} label="You ask" hint="voice or type" />
-            <FlowArrow />
-            <FlowStep icon={<SparkGlyph />} label="Assistant routes" hint="picks the tab" accent />
-            <FlowArrow />
-            <FlowStep icon={<RouteGlyph />} label="Agent works" hint="in its own worktree" />
-          </ol>
+          <AssistantAnimation />
 
           <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3">
             {pillars.map((pillar) => (
@@ -183,46 +176,83 @@ export function OreAssistant() {
   );
 }
 
-function FlowStep({
-  icon,
-  label,
-  hint,
-  accent = false,
-}: {
-  icon: ReactNode;
-  label: string;
-  hint: string;
-  accent?: boolean;
-}) {
-  return (
-    <li
-      className={`ore-glass-on-dark flex items-center gap-3 rounded-full py-2 pr-5 pl-2.5 ${
-        accent ? "ring-1 ring-[rgb(245_158_11_/_0.5)]" : ""
-      }`}
-    >
-      <span
-        className={`grid size-9 shrink-0 place-items-center rounded-full ${
-          accent ? "bg-[var(--color-brand)] text-[#1f1300]" : "bg-white/12 text-white"
-        }`}
-      >
-        {icon}
-      </span>
-      <span className="text-left">
-        <span className="block font-sans text-[15px] font-semibold text-white">
-          {label}
-        </span>
-        <span className="block font-sans text-[13px] text-white/55">{hint}</span>
-      </span>
-    </li>
-  );
-}
+const demoWorktrees = [
+  { name: "api", branch: "ore/api-cleanup", task: "Working independently", active: false },
+  { name: "website", branch: "ore/landing-page", task: "Building the page", active: true },
+  { name: "app", branch: "ore/native-polish", task: "Working independently", active: false },
+];
 
-function FlowArrow() {
+function AssistantAnimation() {
   return (
-    <li aria-hidden="true" className="text-white/35">
-      <Glyph size={18}>
-        <path d="M4 12h15M14 7l5 5-5 5" />
-      </Glyph>
-    </li>
+    <div className="ore-assistant-demo mt-10">
+      <div className="ore-assistant-demo-header">
+        <p className="font-mono text-[11px] tracking-[0.12em] text-white/60 uppercase">
+          One request. The right worktree.
+        </p>
+        <label className="ore-assistant-pause">
+          <input type="checkbox" aria-controls="ore-assistant-flow" />
+          Pause animation
+        </label>
+      </div>
+
+      <div id="ore-assistant-flow" className="ore-assistant-flow">
+        <div className="ore-assistant-request">
+          <div className="flex items-center justify-between gap-4">
+            <span className="flex items-center gap-2 text-sm text-white/70">
+              <MicGlyph /> You ask
+            </span>
+            <div className="ore-assistant-wave" aria-hidden="true">
+              {[10, 18, 26, 14, 30, 20, 12, 24, 16].map((height, index) => (
+                <span
+                  key={index}
+                  style={{ height, "--wave-delay": `${index * -0.13}s` } as CSSProperties}
+                />
+              ))}
+            </div>
+          </div>
+          <p className="mt-5 font-sans text-xl leading-relaxed font-medium tracking-tight text-white">
+            “Add a pricing section to the website.”
+          </p>
+          <p className="mt-5 font-mono text-[11px] text-white/50">VOICE OR TYPE · YOUR CALL</p>
+        </div>
+
+        <div className="ore-assistant-wire" aria-hidden="true"><span /></div>
+
+        <div className="ore-assistant-router">
+          <div className="ore-assistant-orbit" aria-hidden="true">
+            <span className="ore-assistant-orbit-ring" />
+            <span className="ore-assistant-orbit-ring ore-assistant-orbit-ring-delayed" />
+            <span className="ore-assistant-core"><SparkGlyph /></span>
+          </div>
+          <p className="font-sans text-lg font-semibold text-white">Assistant routes</p>
+          <p className="mt-1 text-sm text-white/60">Context becomes a brief.</p>
+          <span className="ore-assistant-route-tag">website <HandoffGlyph /></span>
+        </div>
+
+        <div className="ore-assistant-wire ore-assistant-wire-out" aria-hidden="true"><span /></div>
+
+        <div className="ore-assistant-fleet">
+          {demoWorktrees.map((worktree) => (
+            <div
+              key={worktree.name}
+              className={`ore-assistant-worktree ${worktree.active ? "ore-assistant-worktree-active" : ""}`}
+            >
+              <div className="flex items-center gap-2.5">
+                <span className={worktree.active ? "text-[#ffcf7a]" : "text-white/40"}><RouteGlyph /></span>
+                <span className="font-mono text-sm text-white">{worktree.name}</span>
+                <span className="ore-assistant-agent-dot" aria-hidden="true" />
+              </div>
+              <p className="mt-2 font-mono text-[11px] text-white/50">{worktree.branch}</p>
+              <p className="mt-3 text-xs text-white/70">{worktree.task}</p>
+              {worktree.active ? <div className="ore-assistant-progress" aria-hidden="true"><span /></div> : null}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <p className="ore-assistant-demo-caption">
+        Example handoff <span aria-hidden="true">/</span> Each agent keeps its own context. You keep the overview.
+      </p>
+    </div>
   );
 }

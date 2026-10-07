@@ -130,6 +130,196 @@ html[data-theme="dark"] .ore-glass {
   border-color: rgb(255 255 255 / 0.4);
 }
 
+/* A CSS-only illustration keeps the assistant handoff independent of hydration. */
+.ore-assistant-demo {
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgb(12 15 29 / 0.72), rgb(20 20 38 / 0.86));
+  box-shadow: inset 0 1px rgb(255 255 255 / 0.06), 0 24px 64px -32px rgb(0 0 0 / 0.6);
+  overflow: hidden;
+}
+
+.ore-assistant-demo-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgb(255 255 255 / 0.09);
+}
+
+.ore-assistant-pause {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  color: rgb(255 255 255 / 0.65);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ore-assistant-pause input { accent-color: #ffcf7a; }
+.ore-assistant-pause input:focus-visible { outline: 2px solid white; outline-offset: 4px; }
+
+.ore-assistant-flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px minmax(0, 0.85fr) 48px minmax(0, 1fr);
+  align-items: center;
+  padding: 40px 32px;
+  background-image: radial-gradient(rgb(255 255 255 / 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.ore-assistant-request,
+.ore-assistant-worktree {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 16px;
+  background: #1d2032;
+}
+
+.ore-assistant-request { transform: rotate(-2deg); }
+.ore-assistant-wave { display: flex; align-items: center; gap: 3px; height: 32px; }
+.ore-assistant-wave span {
+  width: 3px;
+  border-radius: 4px;
+  background: #ffcf7a;
+  animation: ore-assistant-wave 1.2s ease-in-out var(--wave-delay) infinite alternate;
+}
+
+.ore-assistant-wire {
+  position: relative;
+  height: 1px;
+  background: rgb(255 207 122 / 0.25);
+  overflow: hidden;
+}
+
+.ore-assistant-wire span {
+  position: absolute;
+  inset: -1px 0;
+  background: linear-gradient(90deg, transparent, #ffcf7a, transparent);
+  animation: ore-assistant-send 3s ease-in-out infinite;
+}
+.ore-assistant-wire-out span { animation-delay: 1.5s; }
+.ore-assistant-router { min-width: 0; text-align: center; }
+.ore-assistant-orbit { position: relative; display: grid; place-items: center; height: 136px; }
+.ore-assistant-orbit-ring {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border: 1px solid rgb(255 207 122 / 0.5);
+  border-radius: 50%;
+  animation: ore-assistant-ripple 4s ease-out infinite;
+}
+.ore-assistant-orbit-ring-delayed { animation-delay: -2s; }
+.ore-assistant-core {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border: 1px solid #ffe2a6;
+  border-radius: 22px;
+  color: #412600;
+  background: linear-gradient(145deg, #ffe2a6, #f59e0b);
+  box-shadow: 0 0 40px rgb(245 158 11 / 0.25), inset 0 1px rgb(255 255 255 / 0.7);
+}
+.ore-assistant-core svg { width: 32px; height: 32px; }
+.ore-assistant-route-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 5px 10px;
+  border: 1px solid rgb(255 207 122 / 0.2);
+  border-radius: 8px;
+  color: #ffcf7a;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+}
+.ore-assistant-fleet { display: grid; gap: 10px; }
+.ore-assistant-worktree { padding: 16px; }
+.ore-assistant-worktree-active {
+  border-color: rgb(255 207 122 / 0.65);
+  background: linear-gradient(120deg, #3d3026, #252536);
+}
+.ore-assistant-agent-dot {
+  width: 6px;
+  height: 6px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: #a9b6d6;
+}
+.ore-assistant-worktree-active .ore-assistant-agent-dot {
+  background: #ffcf7a;
+  animation: ore-assistant-activity 2s ease-in-out infinite;
+}
+.ore-assistant-progress { height: 3px; margin-top: 12px; overflow: hidden; border-radius: 4px; background: rgb(255 207 122 / 0.12); }
+.ore-assistant-progress span {
+  display: block;
+  height: 100%;
+  background: #ffcf7a;
+  transform-origin: left;
+  animation: ore-assistant-progress 6s ease-in-out infinite;
+}
+.ore-assistant-demo-caption {
+  padding: 16px 24px;
+  border-top: 1px solid rgb(255 255 255 / 0.09);
+  color: rgb(255 255 255 / 0.55);
+  font-size: 12px;
+  line-height: 1.8;
+  text-align: center;
+}
+.ore-assistant-demo-caption span { padding: 0 8px; color: #ffcf7a; }
+
+@keyframes ore-assistant-wave { from { transform: scaleY(0.35); } to { transform: scaleY(1); } }
+@keyframes ore-assistant-send {
+  0%, 15% { transform: translateX(-100%); opacity: 0; }
+  30%, 65% { opacity: 1; }
+  85%, 100% { transform: translateX(100%); opacity: 0; }
+}
+@keyframes ore-assistant-ripple {
+  from { transform: scale(0.75); opacity: 0.65; }
+  to { transform: scale(1.55); opacity: 0; }
+}
+@keyframes ore-assistant-activity { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+@keyframes ore-assistant-progress {
+  0% { transform: scaleX(0.08); opacity: 0; }
+  10% { opacity: 1; }
+  80%, 90% { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+
+#assistant:has(.ore-assistant-pause input:checked) *,
+#assistant:has(.ore-assistant-pause input:checked) *::after {
+  animation-play-state: paused;
+}
+
+@media (max-width: 1023px) {
+  .ore-assistant-flow { grid-template-columns: minmax(0, 1fr); padding: 28px 20px; }
+  .ore-assistant-request { width: 100%; max-width: 360px; justify-self: center; transform: none; }
+  .ore-assistant-wire { width: 1px; height: 40px; justify-self: center; }
+  .ore-assistant-wire span { inset: 0 -1px; background: linear-gradient(transparent, #ffcf7a, transparent); animation-name: ore-assistant-send-down; }
+  .ore-assistant-router { padding-bottom: 20px; }
+  .ore-assistant-fleet { width: 100%; max-width: 360px; justify-self: center; }
+  .ore-assistant-worktree-active { order: -1; }
+  .ore-assistant-demo-header { padding: 14px 20px; gap: 8px; }
+}
+@keyframes ore-assistant-send-down {
+  0%, 15% { transform: translateY(-100%); opacity: 0; }
+  30%, 65% { opacity: 1; }
+  85%, 100% { transform: translateY(100%); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ore-assistant-demo *, .ore-assistant-demo *::after { animation: none; }
+  .ore-assistant-orbit-ring { opacity: 0.3; }
+  .ore-assistant-orbit-ring-delayed { transform: scale(1.35); }
+  .ore-assistant-pause { display: none; }
+}
+
 /* The demo video's scroll zoom lives in OreDemoVideo.tsx: it sits inside
    clipped panels, where a CSS view() timeline resolves against the nearest
    scroll container and never advances. */
