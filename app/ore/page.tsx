@@ -141,6 +141,7 @@ function Hero() {
 const agents = [
   { name: "Claude Code", icon: "/agents/claude.svg" },
   { name: "Codex", icon: "/agents/codex.svg" },
+  { name: "Antigravity", icon: "/agents/antigravity.svg" },
   { name: "Cursor", icon: "/agents/cursor.svg", note: "experimental" },
 ];
 
@@ -388,7 +389,7 @@ const faqs: { q: string; a: ReactNode }[] = [
   },
   {
     q: "Which agents does it support?",
-    a: "Claude Code and Codex, fully. Cursor's agent is experimental: its CLI can't answer permission prompts yet, so ORE only runs it if you opt in.",
+    a: "Claude Code, Codex and Antigravity, fully. Cursor's agent is experimental: its CLI can't answer permission prompts yet, so ORE only runs it if you opt in.",
   },
   {
     q: "Does my code leave my Mac?",
@@ -414,7 +415,7 @@ const faqs: { q: string; a: ReactNode }[] = [
   },
   {
     q: "What do I need to run it?",
-    a: "A Mac with Apple Silicon on macOS 14 Sonoma or later, plus Claude Code or Codex installed and signed in.",
+    a: "A Mac with Apple Silicon on macOS 14 Sonoma or later, plus Claude Code, Codex or Antigravity installed and signed in.",
   },
 ];
 
